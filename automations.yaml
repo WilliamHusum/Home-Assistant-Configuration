@@ -1,0 +1,1393 @@
+- id: '1600804326941'
+  alias: "POSTBOX - \U0001F4EB - When new mail is recieved,  raise new mail flag."
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 0c62bc5f6e49e497033cb777d21990e8
+    entity_id: binary_sensor.postbox
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.nyposttoggle
+  mode: single
+- id: '1602058484115'
+  alias: "KITCHEN - \U0001F4A1 - Turn off lights when no movement"
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: b17c0a6cfa0811ea930bfb50a7a434b5
+    entity_id: binary_sensor.kitchen_motion
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 4
+      seconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 50f864ca096c11eb816e8f077f82dfc0
+    entity_id: light.kokken
+    domain: light
+  mode: single
+- id: '1602058777822'
+  alias: "HALLWAY - \U0001F4A1 - Turn off lights when no movement"
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: 6cb70a7f0f1211ebaabcdf6e411f1f6d
+    entity_id: binary_sensor.hallway_motion
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.gang
+  mode: single
+- id: '1603368302037'
+  alias: "BEDROOM - \U0001F39A️ - Bed - Switch, Turn off all lights"
+  description: ''
+  trigger:
+  - device_id: 7eaf76f7145d11ebb0ba97b579ce4cf1
+    domain: zha
+    platform: device
+    type: remote_button_long_release
+    subtype: dim_up
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.alle_lys
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.sleepmode
+  mode: single
+- id: '1605703328614'
+  alias: "PHONE - \U0001F4F1 - Mute phone, when arriving at work"
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.william
+    zone: zone.ok_w_arbejde
+    event: enter
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_n986b
+    data:
+      message: enter
+      title: OK
+  mode: single
+- id: '1605705437982'
+  alias: "PHONE - \U0001F4F1 - Unmute phone when leaving work"
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.william
+    zone: zone.ok_w_arbejde
+    event: leave
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_n986b
+    data:
+      message: leave
+      title: OK
+  mode: single
+- id: '1608820379175'
+  alias: "BEDROOM - \U0001F98E - Turn on Yes cage lights"
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 2935033c3fd88235d07015e237833ea1
+    entity_id: switch.terrarie
+    domain: switch
+  mode: single
+- id: '1608820416405'
+  alias: "BEDROOM - \U0001F98E - Turn off Yes cage lights"
+  description: ''
+  trigger:
+  - platform: time
+    at: '21:30:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 2935033c3fd88235d07015e237833ea1
+    entity_id: switch.terrarie
+    domain: switch
+  mode: single
+- id: '1609691683990'
+  alias: "KITCHEN - \U0001F4A1 - Motion detected on kitchen table, turn on lights"
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: b17afbfcfa0811eaa7dc3799f6ffbaf6
+    entity_id: binary_sensor.kitchen_table_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.kokkenbord
+  mode: single
+- id: '1609691894068'
+  alias: "KITCHEN - \U0001F4A1 - Turn off kitchen table lights if no motion detected"
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: b17afbfcfa0811eaa7dc3799f6ffbaf6
+    entity_id: binary_sensor.kitchen_table_motion
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 20
+      seconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.kokkenbord
+  mode: single
+- id: '1616532813124'
+  alias: "KITCHEN - \U0001F4A1 - Motion detected, turn on the lights"
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: b17c0a6cfa0811ea930bfb50a7a434b5
+    entity_id: binary_sensor.kitchen_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: schedule.nighttime
+      state: 'on'
+    then:
+    - type: turn_on
+      device_id: 50f864ca096c11eb816e8f077f82dfc0
+      entity_id: light.kokken
+      domain: light
+      brightness_pct: 35
+    else:
+    - type: turn_on
+      device_id: 50f864ca096c11eb816e8f077f82dfc0
+      entity_id: light.kokken
+      domain: light
+      brightness_pct: 100
+  mode: single
+- id: '1616576648730'
+  alias: "HALLWAY - \U0001F4A1 - Turn on the lights when movement"
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 6cb70a7f0f1211ebaabcdf6e411f1f6d
+    entity_id: binary_sensor.hallway_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: schedule.nighttime
+      state: 'on'
+    then:
+    - service: light.turn_on
+      data:
+        brightness_pct: 35
+      target:
+        entity_id: light.gang
+    else:
+    - service: light.turn_on
+      data:
+        brightness_pct: 100
+      target:
+        entity_id: light.gang
+  mode: single
+- id: '1631380252810'
+  alias: "BATHROOM - \U0001F4A1 - Turn off lights after no motion"
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: f1b351356b4d3bbba3dd9769562862bf
+    entity_id: binary_sensor.bathroom_motion
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.showertoggle
+    state: 'off'
+  action:
+  - if:
+    - condition: device
+      type: is_on
+      device_id: b347599121c231b16f3bf2a404c83d8b
+      entity_id: light.badevarelse
+      domain: light
+    then:
+    - device_id: b347599121c231b16f3bf2a404c83d8b
+      domain: light
+      entity_id: light.badevarelse
+      type: flash
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - if:
+    - type: is_no_motion
+      condition: device
+      device_id: f1b351356b4d3bbba3dd9769562862bf
+      entity_id: binary_sensor.bathroom_motion
+      domain: binary_sensor
+    then:
+    - type: turn_off
+      device_id: b347599121c231b16f3bf2a404c83d8b
+      entity_id: light.badevarelse
+      domain: light
+  mode: single
+- id: '1631542614171'
+  alias: "BATHROOM - \U0001F3B5 - Play jazz when light turns on"
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      device_id: 84ea2cbefb8f11ea8dba7d340d1e661f
+      domain: media_player
+      entity_id: media_player.spotify_william_husum
+      type: is_idle
+    - condition: device
+      device_id: 84ea2cbefb8f11ea8dba7d340d1e661f
+      domain: media_player
+      entity_id: media_player.spotify_william_husum
+      type: is_off
+  - condition: not
+    conditions:
+    - condition: device
+      device_id: 510d751f2b2f8c0c5d4dcc061322eff8
+      domain: media_player
+      entity_id: media_player.badevaerelse_speaker
+      type: is_playing
+    - condition: state
+      entity_id: media_player.mass_badevaerelse_speaker
+      state: playing
+  action:
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.2
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  - service: media_player.play_media
+    data:
+      media_content_id: spotify:playlist:37i9dQZF1DWTcEjayzrZ4x
+      media_content_type: playlist
+      enqueue: replace
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  mode: single
+- id: '1631543656957'
+  alias: "BATHROOM - \U0001F3B5 - Turn off music"
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+  condition:
+  - condition: not
+    conditions:
+    - condition: device
+      device_id: 06a1f973f9de11ea95002b7038c3b71a
+      domain: media_player
+      entity_id: media_player.anlaeg
+      type: is_playing
+  action:
+  - service: media_player.media_stop
+    data: {}
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  - service: media_player.turn_off
+    data: {}
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  mode: single
+- id: '1631545558179'
+  alias: "BATHROOM - \U0001F39A️ - Switch, turn lights on "
+  description: ''
+  trigger:
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: turn_on
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1631545588662'
+  alias: "BATHROOM - \U0001F39A️ - Switch, turn off lights"
+  description: ''
+  trigger:
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.showertoggle
+    data: {}
+  - type: turn_off
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+  mode: single
+- id: '1631545664487'
+  alias: "BATHROOM - \U0001F39A️ - Switch, start ShowerMode William"
+  description: ''
+  trigger:
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_down
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.showertoggle
+    data: {}
+  - type: turn_on
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+    brightness_pct: 100
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.5
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  - service: media_player.play_media
+    data:
+      media_content_id: spotify:playlist:6VN0t0qqXZ9cVafL6hd029
+      media_content_type: playlist
+      enqueue: replace
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  mode: single
+- id: '1635263893395'
+  alias: "VACUUM - \U0001F9F9 - Vacuum when no one's home"
+  description: On weekdays
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - condition: device
+    device_id: 80e4fe67fb2e11ea9f1a95fe17b7b65d
+    domain: device_tracker
+    entity_id: device_tracker.grethas_iphone7
+    type: is_not_home
+  - condition: device
+    device_id: 7e92a6a1fa0a11eaa70e2fad81a79ac0
+    domain: device_tracker
+    entity_id: device_tracker.sm_n986b
+    type: is_not_home
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    before: 00:00:00
+    after: 00:00:00
+  action:
+  - device_id: 3395b043028e5ff0056eb1febf9ea385
+    domain: vacuum
+    entity_id: vacuum.roborock_s5_max
+    type: clean
+  mode: single
+- id: '1635268414740'
+  alias: "VACUUM - \U0001F9F9 - On wednesdays, go to trashcan"
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - wed
+    before: 00:00:00
+    after: 00:00:00
+  action:
+  - service: xiaomi_miio.vacuum_goto
+    data:
+      x_coord: '23549'
+      y_coord: '18687'
+    target:
+      device_id: 3395b043028e5ff0056eb1febf9ea385
+  mode: single
+- id: '1639592815942'
+  alias: BATHROOM - ⚙️- Turn off ShowerToggle, after 30 minutes
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.showertoggle
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.showertoggle
+    data: {}
+  - type: turn_off
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+  mode: single
+- id: '1639593457499'
+  alias: BATHROOM - ⚙️ - When ShowerToggle turns off, Turn off light
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.showertoggle
+    to: 'off'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+  mode: single
+- id: '1639654751554'
+  alias: "HALLWAY - \U0001F39A️  - Button, turn off all lights and devices - turn
+    on Verner Panton if the sun has set"
+  description: ''
+  trigger:
+  - device_id: 1fe43570a630758df5115a469f02948e
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.alle_lys
+  - service: media_player.turn_off
+    data: {}
+    target:
+      entity_id:
+      - media_player.tv
+      - media_player.anlaeg
+  - condition: sun
+    after: sunset
+  - type: turn_on
+    device_id: 0fffdb08160811ebb610515f85f5503d
+    entity_id: light.verner_panton
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1639667546678'
+  alias: "HALLWAY - \U0001F39A️ - Button, turn on all lights "
+  description: ''
+  trigger:
+  - device_id: 1fe43570a630758df5115a469f02948e
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.all_lights
+    data:
+      brightness_pct: 100
+  mode: single
+- id: '1641225678762'
+  alias: "BEDROOM - \U0001F39A️ - Bed - Switch, toggle G sengelampe"
+  description: ''
+  trigger:
+  - device_id: 7eaf76f7145d11ebb0ba97b579ce4cf1
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      brightness_pct: 40
+    target:
+      entity_id: light.g_sengelampe
+  mode: single
+- id: '1641225740158'
+  alias: "BEDROOM - \U0001F39A️ - Bed - Switch, toggle W sengelampe "
+  description: ''
+  trigger:
+  - device_id: 7eaf76f7145d11ebb0ba97b579ce4cf1
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      brightness_pct: 40
+    target:
+      entity_id: light.w_sengelampe
+  mode: single
+- id: '1642166631595'
+  alias: "MAINTENANCE - \U0001F527 - Restart Home Assistant every night"
+  description: ''
+  trigger:
+  - platform: time
+    at: 04:00:00
+  condition: []
+  action:
+  - service: script.restart_ha
+    data: {}
+  mode: single
+- id: '1643372327712'
+  alias: "BEDROOM - \U0001FA73 - Announce weather when underwear drawer opens"
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: b842438b5abaa8c772cb6a1062966076
+    entity_id: binary_sensor.skuffe
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: input_boolean.skuffetoggle
+    state: 'off'
+  - condition: time
+    after: 06:00:00
+    before: '11:00:00'
+  action:
+  - service: script.13_statusoplasning
+    data: {}
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.skuffetoggle
+    data: {}
+  mode: single
+- id: '1643556002373'
+  alias: BEDROOM - ⏱ - Turn off SkuffeToggle after an hour
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.skuffetoggle
+    to: 'on'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.skuffetoggle
+    data: {}
+  mode: single
+- id: '1645867014905'
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, turn off living room lights"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8b065f67096b11ebab3141643c8a446f
+    entity_id: light.rispapir
+    domain: light
+  - type: turn_off
+    device_id: 0fffdb08160811ebb610515f85f5503d
+    entity_id: light.verner_panton
+    domain: light
+  mode: single
+- id: '1645867094133'
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, turn on living room lights "
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8b065f67096b11ebab3141643c8a446f
+    entity_id: light.rispapir
+    domain: light
+    brightness_pct: 100
+  - type: turn_on
+    device_id: 0fffdb08160811ebb610515f85f5503d
+    entity_id: light.verner_panton
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1645867165399'
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, press dim down to toggle Verner Panton"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_down
+  condition: []
+  action:
+  - type: toggle
+    device_id: 0fffdb08160811ebb610515f85f5503d
+    entity_id: light.verner_panton
+    domain: light
+  mode: single
+- id: '1645867195792'
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, press dim up to toggle rispapir"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+  condition: []
+  action:
+  - type: toggle
+    device_id: 8b065f67096b11ebab3141643c8a446f
+    entity_id: light.rispapir
+    domain: light
+  mode: single
+- id: '1645867244165'
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, hold off button to start movie mode"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8b065f67096b11ebab3141643c8a446f
+    entity_id: light.rispapir
+    domain: light
+    brightness_pct: 40
+  - type: turn_on
+    device_id: 0fffdb08160811ebb610515f85f5503d
+    entity_id: light.verner_panton
+    domain: light
+    brightness_pct: 40
+  mode: single
+- id: '1647375697324'
+  alias: "PHONE - \U0001F4F1 - Tablet and phone DND sync on"
+  description: When phone's set to DND, sync it to tablet and set it to DND as well
+  trigger:
+  - platform: state
+    entity_id: sensor.sm_n986b_do_not_disturb_sensor
+    to: priority_only
+  condition: []
+  action:
+  - service: notify.mobile_app_tablet
+    data:
+      message: Dnd sync on
+      title: DND
+  mode: single
+- id: '1647376650744'
+  alias: "PHONE - \U0001F4F1 - Tablet and phone DND sync off"
+  description: When phone's set to DND, sync it to tablet and set it to DND as well
+  trigger:
+  - platform: state
+    entity_id: sensor.sm_n986b_do_not_disturb_sensor
+    to: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_tablet
+    data:
+      message: Dnd sync off
+      title: DND
+  mode: single
+- id: '1650011860094'
+  alias: "BEDROOM - \U0001F39A️ - Switch, turn on all bedroom lights"
+  description: ''
+  trigger:
+  - device_id: db28128d01b811eb8b321fddc9a811b3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.sovevaerelse
+  mode: single
+- id: '1650011889715'
+  alias: "BEDROOM - \U0001F39A️ - Switch, turn off all bedroom lights"
+  description: ''
+  trigger:
+  - device_id: db28128d01b811eb8b321fddc9a811b3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.sovevaerelse
+  mode: single
+- id: '1650012149183'
+  alias: "BEDROOM - \U0001F39A️ - Press dim up to toggle night lights"
+  description: ''
+  trigger:
+  - device_id: db28128d01b811eb8b321fddc9a811b3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.sengelamper
+  mode: single
+- id: '1651761148588'
+  alias: "BATHROOM - \U0001F4A1 - when motion detected, turn on lights"
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: f1b351356b4d3bbba3dd9769562862bf
+    entity_id: binary_sensor.bathroom_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: schedule.nighttime
+      state: 'on'
+    then:
+    - type: turn_on
+      device_id: b347599121c231b16f3bf2a404c83d8b
+      entity_id: light.badevarelse
+      domain: light
+      brightness_pct: 35
+    else:
+    - type: turn_on
+      device_id: b347599121c231b16f3bf2a404c83d8b
+      entity_id: light.badevarelse
+      domain: light
+      brightness_pct: 100
+  - service: timer.start
+    data: {}
+    target:
+      entity_id: timer.bathroom_countdown
+  mode: single
+- id: '1664353376514'
+  alias: "LITTERBOX - \U0001F408- Create actionable notification when arriving home"
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.william
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: state
+    entity_id: input_boolean.leftworktoggle
+    state: 'on'
+  - condition: time
+    before: '17:00:00'
+    after: '14:00:00'
+    weekday:
+    - fri
+    - thu
+    - wed
+    - mon
+    - tue
+  action:
+  - service: notify.mobile_app_sm_n986b
+    data:
+      message: Husk at tømme kattebakken
+      title: Velkommen hjem!
+      data:
+        actions:
+        - action: TOGGLE_LITTERBOX
+          title: Dismiss
+        - action: LITTERBOX_SNOOZE
+          title: Snooze
+  mode: single
+- id: '1664888211240'
+  alias: "LITTERBOX - \U0001F408 - Toggle litterbox_bool, when dismiss button pressed"
+  description: ''
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    context: {}
+    event_data:
+      action: TOGGLE_LITTERBOX
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.kattebakke_tomt
+  - service: notify.mobile_app_tablet
+    data:
+      message: Hej
+  mode: single
+- id: '1664955768809'
+  alias: "LOCATION - \U0001F4CC - When I leave work, turn on LeftWorkToggle"
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.william
+    zone: zone.ok_w_arbejde
+    event: leave
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.leftworktoggle
+  mode: single
+- id: '1665144284977'
+  alias: "BATHROOM - \U0001F39A️ - Switch, start ShowerMode Gretha"
+  description: ''
+  trigger:
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.showertoggle
+    data: {}
+  - type: turn_on
+    device_id: b347599121c231b16f3bf2a404c83d8b
+    entity_id: light.badevarelse
+    domain: light
+    brightness_pct: 100
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.5
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  - service: media_player.play_media
+    data:
+      media_content_id: spotify:playlist:0jjj4NNEC1oMFwpNLIiyJb
+      media_content_type: playlist
+      enqueue: replace
+    target:
+      entity_id: media_player.mass_badevaerelse_speaker
+  mode: single
+- id: '1665168850009'
+  alias: "FRONTEND - \U0001F3B6 - When button pressed, play chosen playlist on chosen
+    media player"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.play_playlist
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: 'spotify:playlist:{{states.sensor.chosen_playlist.state}}
+
+        '
+      media_content_type: playlist
+      enqueue: replace
+    target:
+      entity_id: '{{states.sensor.chosen_media_player.state}}
+
+        '
+  mode: single
+- id: '1665425063643'
+  alias: "LITTERBOX - \U0001F408 - Snooze notification, when Snooze button is pressed"
+  description: ''
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    context: {}
+    event_data:
+      action: LITTERBOX_SNOOZE
+  condition: []
+  action:
+  - service: script.turn_on
+    data: {}
+    target:
+      entity_id: script.wait_1_hour_then_re_fire_litterbox_notification
+  mode: single
+- id: '1665642719862'
+  alias: BEDROOM - ⏰ - Slowly turn on lights before alarm
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.next_alarm_trigger_now
+    to: 'true'
+  condition:
+  - condition: time
+    after: 04:30:00
+    before: '10:00:00'
+  - condition: zone
+    entity_id: person.william
+    zone: zone.home
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.sleepmode
+  - service: script.slowly_turn_on_the_light
+    data: {}
+  mode: queued
+  max: 10
+- id: '1666679666224'
+  alias: "LITTERBOX - \U0001F408 - Create calendar event, when kattebakke bool is
+    toggled"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.kattebakke_tomt
+    to: 'on'
+  condition: []
+  action:
+  - service: google.create_event
+    data:
+      summary: Kattebakke tømt
+      in:
+        days: 0
+    target:
+      entity_id: calendar.kattebakke_tomning
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.kattebakke_tomt
+  mode: single
+- id: '1666682450310'
+  alias: "BATHROOM - \U0001F39A️ - Switch, double press turn off to toggle kattebakke_bool
+    on"
+  description: ''
+  trigger:
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_off
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.kattebakke_tomt
+  mode: single
+- id: '1666683606014'
+  alias: "MAINTENANCE - \U0001F527 - Reset toggles at midnight"
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.kattebakke_tomt
+      - input_boolean.leftworktoggle
+  mode: single
+- id: '1666862570690'
+  alias: "LIVING ROOM - \U0001F4A1 - Turn off lights, if room is not occupied"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.living_room_fp1_occupancy
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: binary_sensor.living_room_motion
+    state: 'off'
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id:
+      - 8b065f67096b11ebab3141643c8a446f
+      - 0fffdb08160811ebb610515f85f5503d
+  mode: single
+- id: '1666869877117'
+  alias: "LIVING ROOM - \U0001F4A1 - When motion detected, turn on lights"
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: c8de2df44d715eea8218b63d09f46f23
+    entity_id: binary_sensor.living_room_motion
+    domain: binary_sensor
+  - type: occupied
+    platform: device
+    device_id: 36b50d9019d49c683a6000bce7715b88
+    entity_id: binary_sensor.living_room_fp1_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: light.rispapir
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      device_id:
+      - 8b065f67096b11ebab3141643c8a446f
+      - 0fffdb08160811ebb610515f85f5503d
+  - if:
+    - condition: state
+      entity_id: schedule.nighttime
+      state: 'on'
+    then:
+    - type: turn_on
+      device_id: 8b065f67096b11ebab3141643c8a446f
+      entity_id: light.rispapir
+      domain: light
+      brightness_pct: 35
+    - type: turn_on
+      device_id: 0fffdb08160811ebb610515f85f5503d
+      entity_id: light.verner_panton
+      domain: light
+      brightness_pct: 35
+    else:
+    - type: turn_on
+      device_id: 8b065f67096b11ebab3141643c8a446f
+      entity_id: light.rispapir
+      domain: light
+      brightness_pct: 100
+    - type: turn_on
+      device_id: 0fffdb08160811ebb610515f85f5503d
+      entity_id: light.verner_panton
+      domain: light
+      brightness_pct: 100
+  mode: single
+- id: '1667982697940'
+  alias: "MAINTENANCE - \U0001F527 - When SleepMode is turned on, turn off automations"
+  description: 'Living Room lights on
+
+    Bathroom music'
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.sleepmode
+    to: 'on'
+  condition: []
+  action:
+  - service: homeassistant.turn_off
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.living_room_when_motion_detected_turn_on_lights
+  mode: single
+- id: '1667982851257'
+  alias: "MAINTENANCE - \U0001F527 - When SleepMode is turned off, turn on automations"
+  description: 'Living Room lights on
+
+    Bathroom music'
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.sleepmode
+    to: 'off'
+  condition: []
+  action:
+  - service: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.living_room_when_motion_detected_turn_on_lights
+  mode: single
+- id: '1667994319191'
+  alias: "MAINTENANCE - \U0001F527 - When HåndværkerMode is turned on, disable auto
+    lights"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.handvaerkermode
+    to: 'on'
+  condition: []
+  action:
+  - service: homeassistant.turn_off
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.03_sluk_badevaerelse
+      - automation.02_sluk_lyset_i_gangen
+      - automation.01_sluk_lyset_i_kokkenet
+  mode: single
+- id: '1667994378989'
+  alias: "MAINTENANCE - \U0001F527 - When HåndværkerMode is turned off, enable auto
+    lights"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.handvaerkermode
+    to: 'off'
+  condition: []
+  action:
+  - service: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.03_sluk_badevaerelse
+      - automation.02_sluk_lyset_i_gangen
+      - automation.01_sluk_lyset_i_kokkenet
+  mode: single
+- id: '1668010050498'
+  alias: "BATHROOM - \U0001F30A - If humidity rises or switch turn on double clicked,
+    turn on ShowerToggle"
+  description: ''
+  trigger:
+  - type: humidity
+    platform: device
+    device_id: 3844de94e41deff0c80fc252815b52ec
+    entity_id: sensor.bathroom_humidity
+    domain: sensor
+    above: 75
+  - device_id: bf8d6c25b28294847a15d3dc32842edf
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.showertoggle
+  mode: single
+- id: '1668148747862'
+  alias: "MAINTENANCE - \U0001F527 - At 6:30, turn off sleepmode"
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:30:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.sleepmode
+  mode: single
+- id: '1673257664798'
+  alias: "BEDROOM - \U0001F321 - If window is opened, save current temperature and
+    lower thermotstat temperature"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.skuffe
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_number.set_value
+    data:
+      value: '{{ state_attr(''climate.sovevarelse_thermostat'', ''temperature'') }}'
+    target:
+      entity_id: input_number.sovevaerelse_termostat_temperatur
+  - service: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      entity_id: climate.sovevarelse_thermostat
+  mode: single
+- id: '1673260611114'
+  alias: "BEDROOM - \U0001F321 - When window is closed again, re set thermostat to
+    old value"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.skuffe
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: '{{ states.input_number.sovevaerelse_termostat_temperatur.state
+        }}'
+    target:
+      entity_id: climate.sovevarelse_thermostat
+  mode: single
+- id: '1673464509996'
+  alias: "LIVING ROOM - \U0001F4FA - When TV turns on, turn on TV lights"
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.lumi_lumi_plug_maeu01_active_power
+    above: 60
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      transition: 30
+      color_temp: 356
+      brightness_pct: 100
+    target:
+      entity_id: light.tv_lys
+  mode: single
+- id: '1673464571445'
+  alias: "LIVING ROOM - \U0001F4FA - When TV is turned off, turn off TV lights"
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.lumi_lumi_plug_maeu01_active_power
+    below: 60
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      transition: 2
+    target:
+      entity_id: light.tv_lys
+  mode: single
+- id: '1673550584415'
+  alias: "POSTBOX - \U0001F4EB - When NyPostToggle is turned on, run post script"
+  description: Post script checks who is home and notifies the people at home
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.nyposttoggle
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: zone.home
+    above: 0
+  action:
+  - service: script.turn_on
+    data: {}
+    target:
+      entity_id: script.post_notify_person_home_of_new_mail
+  mode: single
+- id: '1673550705659'
+  alias: "POSTBOX - \U0001F4EB - When someone arrives home, run post script"
+  description: Post script checks who is home and notifies them of new post/mail
+  trigger:
+  - platform: zone
+    entity_id: person.gretha
+    zone: zone.home
+    event: enter
+  - platform: zone
+    entity_id: person.gretha
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: state
+    entity_id: input_boolean.nyposttoggle
+    state: 'on'
+  action:
+  - service: script.turn_on
+    data: {}
+    target:
+      entity_id: script.post_notify_person_home_of_new_mail
+  mode: single
+- id: '1673551334960'
+  alias: "POSTBOX - \U0001F4EB - When NyPostToggle is turned on, announce on speakers"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.nyposttoggle
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: time
+    after: 07:00:00
+    before: '22:00:00'
+  - condition: numeric_state
+    entity_id: zone.home
+    above: 0
+  action:
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.mass_lejlighed
+      message: Der er kommet post
+      language: da
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.nyposttoggle
+  mode: single

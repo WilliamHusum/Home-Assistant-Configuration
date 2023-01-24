@@ -1,0 +1,267 @@
+- id: '1665427099267'
+  name: Living Room Movie Mode
+  entities:
+    light.rispapir:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 51
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Rispapir
+      supported_features: 40
+      state: 'on'
+    light.verner_panton:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 2202
+      color_temp: 454
+      hs_color:
+      - 29.79
+      - 84.553
+      rgb_color:
+      - 255
+      - 146
+      - 39
+      xy_color:
+      - 0.579
+      - 0.388
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Verner Panton
+      supported_features: 40
+      state: 'on'
+  icon: mdi:movie-filter-outline
+  metadata: {}
+- id: '1667661175833'
+  name: Living Room normal light
+  entities:
+    light.rispapir:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 254
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Rispapir
+      supported_features: 40
+      state: 'on'
+    light.verner_panton:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 2202
+      color_temp: 454
+      hs_color:
+      - 29.79
+      - 84.553
+      rgb_color:
+      - 255
+      - 146
+      - 39
+      xy_color:
+      - 0.579
+      - 0.388
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Verner Panton
+      supported_features: 40
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1667681325205'
+  name: Bedroom Normal
+  entities:
+    light.g_sengelampe:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: G sengelampe
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 2785
+      color_temp: 359
+      hs_color:
+      - 28.217
+      - 63.073
+      rgb_color:
+      - 255
+      - 169
+      - 94
+      xy_color:
+      - 0.517
+      - 0.386
+      state: 'on'
+    light.w_sengelampe:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: W sengelampe
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 2785
+      color_temp: 359
+      hs_color:
+      - 28.217
+      - 63.073
+      rgb_color:
+      - 255
+      - 169
+      - 94
+      xy_color:
+      - 0.517
+      - 0.386
+      state: 'on'
+    light.sovevarelse:
+      supported_color_modes:
+      - onoff
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Soveværelse
+      supported_features: 8
+      color_mode: onoff
+      state: 'on'
+  icon: mdi:bed-king
+  metadata: {}
+- id: '1667681976814'
+  name: Bedroom Night Time
+  entities:
+    light.sovevarelse:
+      supported_color_modes:
+      - onoff
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Soveværelse
+      supported_features: 8
+      state: 'off'
+    light.g_sengelampe:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: G sengelampe
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 102
+      color_temp_kelvin: 2785
+      color_temp: 359
+      hs_color:
+      - 28.217
+      - 63.073
+      rgb_color:
+      - 255
+      - 169
+      - 94
+      xy_color:
+      - 0.517
+      - 0.386
+      state: 'on'
+    light.w_sengelampe:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: W sengelampe
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 102
+      color_temp_kelvin: 2785
+      color_temp: 359
+      hs_color:
+      - 28.217
+      - 63.073
+      rgb_color:
+      - 255
+      - 169
+      - 94
+      xy_color:
+      - 0.517
+      - 0.386
+      state: 'on'
+  icon: mdi:moon-waning-crescent
+  metadata: {}
+- id: '1667686579277'
+  name: Bathroom Normal
+  entities:
+    light.badevarelse:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Badeværelse
+      supported_features: 40
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 3412
+      color_temp: 293
+      hs_color:
+      - 27.265
+      - 46.72
+      rgb_color:
+      - 255
+      - 190
+      - 135
+      xy_color:
+      - 0.461
+      - 0.376
+      state: 'on'
+  metadata: {}
+- id: '1667687680269'
+  name: Kitchen Normal
+  entities:
+    light.kokken:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 254
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Køkken
+      supported_features: 40
+      state: 'on'
+    light.kokkenbord:
+      supported_color_modes:
+      - onoff
+      friendly_name: Køkkenbord
+      supported_features: 0
+      color_mode: onoff
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata:
+    light.kokkenbord:
+      entity_only: true

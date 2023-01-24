@@ -1,0 +1,275 @@
+restart_ha:
+  alias: 05. Restart HA
+  sequence:
+  - service: homeassistant.restart
+    data: {}
+  mode: single
+12_tts_besked:
+  alias: 12. TTS Besked
+  sequence:
+  - service: tts.google_translate_say
+    data_template:
+      entity_id: '{% if is_state("input_select.afspiller", "Anlæg") %} media_player.anlaeg
+        {% elif is_state("input_select.afspiller", "Køkken") %} media_player.kokken  {%
+        elif is_state("input_select.afspiller", "Lejlighed") %} media_player.lejlighed
+        {% elif is_state("input_select.afspiller", "Soveværelse") %} media_player.nestmini0369
+        {% endif %}
+
+        '
+      message: '{{states.input_text.tts_kokken.state}}'
+      language: da
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.tts_kokken
+    data:
+      value: ' '
+  - service: input_text.reload
+  mode: single
+  icon: mdi:cast-audio
+13_statusoplasning:
+  alias: TTS weather status
+  sequence:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: tts.google_translate_say
+    data_template:
+      entity_id: media_player.sovevarelse
+      message: Klokken er {{ (now().strftime("%s") | int + (0*60)) | timestamp_custom("%H:%M",
+        false) }}. Det er {{states.sensor.dark_sky_temperature.state | round(0) }}
+        grader og bliver {{states.sensor.dark_sky_temperature_4h.state | round(0)}}
+        grader i løbet af dagen. Der er {{states.sensor.dark_sky_summary.state}} udenfor.
+      language: da
+  - service: media_player.play_media
+    data:
+      announce: true
+      media_content_type: provider
+      media_content_id: media-source://tts/cloud?message= Klokken er {{ (now().strftime("%s")
+        | int + (0*60)) |     timestamp_custom("%H:%M", false) }}. Det er {{states.sensor.dark_sky_temperature.state
+        | round(0) }} grader og bliver {{states.sensor.dark_sky_temperature_4h.state
+        | round(0)}} grader i løbet af dagen. Der er {{states.sensor.dark_sky_summary.state}}
+        udenfor.
+    target:
+      entity_id: media_player.mass_sovevarelse
+  mode: single
+  icon: mdi:newspaper
+15_find_w_phone:
+  sequence:
+  - service: notify.mobile_app_sm_n986b
+    data:
+      title: FIND MIG
+      message: Her er din telefon
+      data:
+        ttl: 0
+        importance: high
+        priority: high
+        tag: Find
+        channel: alarm_stream
+  mode: single
+  alias: 15. Find W phone
+15_find_g_phone:
+  sequence:
+  - repeat:
+      count: '5'
+      sequence:
+      - service: notify.mobile_app_grethas_iphone12
+        data:
+          message: Her er jeg
+          data:
+            push:
+              sound:
+                name: findmy.wav
+                critical: 1
+                volume: 1
+          title: Find my iphone
+  mode: single
+  alias: 15. Find G phone
+wolt_announce_order_arriving:
+  alias: "\U0001F508WOLT - Announce order is arriving"
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: media-source://tts/cloud?message=Ordren+hos+Wolt+er+blevet+bekr%C3%A6ftet+og+restauranten+begynder+at+lave+den&language=da-DK&gender=female
+      media_content_type: provider
+      announce: true
+    target:
+      entity_id: media_player.mass_anlaeg
+  mode: single
+  icon: mdi:speaker
+wolt_announce_order_confirmed:
+  alias: "\U0001F508WOLT - Announce order confirmed"
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: media-source://tts/cloud?message=Ordren+hos+Wolt+bliver+leveret+om+lidt&language=da-DK&gender=female
+      media_content_type: provider
+      announce: true
+    target:
+      entity_id: media_player.mass_anlaeg
+  mode: single
+  icon: mdi:speaker
+wolt_announce_order_is_done:
+  alias: "\U0001F508WOLT - Announce order is done"
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: media-source://tts/cloud?message=Maden+er+f%C3%A6rdig+og+bliver+hentet+af+buddet+nu&language=da-DK&gender=female
+      media_content_type: provider
+      announce: true
+    target:
+      entity_id: media_player.mass_anlaeg
+  mode: single
+  icon: mdi:speaker
+play_chosen_media_on_chosen_media_player:
+  alias: Play chosen media on chosen media player
+  sequence:
+  - if:
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_select.media_players
+        state: Lejlighed
+      - condition: state
+        entity_id: input_select.media_to_play
+        state: Wienerbrød
+    then:
+    - service: media_player.play_media
+      target:
+        entity_id: media_player.mass_lejlighed
+      data:
+        media_content_id: media-source://mass/database://playlist/15
+        media_content_type: audio/flac
+      metadata:
+        title: Wienerbrød
+        thumbnail: https://images.weserv.nl/?w=200&url=https://mosaic.scdn.co/640/ab67616d0000b27328e3351c36c3fae646af7f2bab67616d0000b273354c90ac13c9f27ffb7d57abab67616d0000b27356fa5a6e75d94fda16dea799ab67616d0000b27397ee6fb7a38d90d0f0f99150
+        media_class: playlist
+        children_media_class:
+        navigateIds:
+        - {}
+        - media_content_type: app
+          media_content_id: media-source://mass
+        - media_content_type: music
+          media_content_id: media-source://mass/playlists
+    - service: media_player.media_next_track
+      data: {}
+      target:
+        entity_id: media_player.mass_lejlighed
+  mode: single
+  icon: mdi:account-music
+play_playlist_on_media_player:
+  alias: Play playlist on media player
+  sequence:
+  - service: media_player.play_media
+    data_template:
+      media_content_id: spotify:playlist:{{states.sensor.chosen_playlist.state}}
+      media_content_type: playlist
+      enqueue: play
+      entity_id:
+        '[object Object]':
+  mode: single
+  icon: mdi:account-music
+wait_1_hour_then_re_fire_litterbox_notification:
+  alias: "\U0001F408Wait 1 hour, then re-fire litterbox notification"
+  sequence:
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: automation.trigger
+    data: {}
+    target:
+      entity_id: automation.litterbox_create_actionable_notification_when_arriving_home
+  mode: single
+slowly_turn_on_the_light:
+  alias: Slowly turn on the light
+  sequence:
+  - service: light.turn_on
+    data:
+      brightness_pct: 3
+    target:
+      entity_id: light.sengelamper
+  - service: light.turn_on
+    data:
+      transition: 300
+      brightness_pct: 33
+    target:
+      entity_id: light.sengelamper
+  - service: light.turn_on
+    data:
+      transition: 300
+      brightness_pct: 66
+    target:
+      entity_id: light.sengelamper
+  - service: light.turn_on
+    data:
+      transition: 300
+      brightness_pct: 100
+    target:
+      entity_id: light.sengelamper
+  mode: single
+  icon: mdi:lightbulb-auto
+show_electricity_graph_on_kitchen_hub:
+  alias: Er el billig?
+  sequence:
+  - if:
+    - condition: numeric_state
+      entity_id: sensor.electricity_cost
+      below: 2
+    then:
+    - service: tts.google_translate_say
+      data:
+        entity_id: media_player.kokken
+        message: Ja
+        language: da
+    else:
+    - service: tts.google_translate_say
+      data_template:
+        entity_id: media_player.kokken
+        message: Nej, det bedste tidspunkt er kl. {{states.sensor.bedste_3_timer_generelt.state}}.
+          Det er om {{states.sensor.antal_timer_til_billigst_el.state}} timer.
+        language: da
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 7
+        milliseconds: 0
+    - service: media_player.turn_off
+      data: {}
+      target:
+        entity_id: media_player.kokken
+  mode: single
+post_notify_person_home_of_new_mail:
+  alias: POST - Notify person home of new mail
+  sequence:
+  - parallel:
+    - if:
+      - condition: state
+        entity_id: person.gretha
+        state: home
+      then:
+      - service: notify.mobile_app_grethas_iphone12
+        data:
+          title: POST
+          message: 'Der er kommet post :-) '
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.nyposttoggle
+    - if:
+      - condition: state
+        entity_id: person.william
+        state: home
+      then:
+      - service: notify.mobile_app_sm_n986b
+        data:
+          message: Der er kommet post
+          title: POST
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.nyposttoggle
+  mode: single
+  icon: mdi:email-alert
