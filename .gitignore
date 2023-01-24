@@ -40,7 +40,6 @@ deps
 tts
 www/icons
 www/floorplans
-www/community
 custom_components/hacs
 downloads
 icloud
