@@ -1,0 +1,197 @@
+- sensor:
+    - name: "Electricity Cost"
+      unique_id: electricity_cost
+      device_class: monetary
+      unit_of_measurement: "DKK"
+      state: >
+        {{ 1.25 * (float(states('sensor.eloverblik_tariff_sum')) + float(states('sensor.nordpool'))) }}
+      attributes:
+        today: >
+          {%- if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'raw_today') -%}
+            {%- set ns = namespace (prices=[]) -%}
+            {%- for item in state_attr('sensor.nordpool', 'raw_today') if item is defined -%}
+              {%- set tarif = float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[loop.index0]) -%}
+              {%- set price = 1.25 * float(item.value + tarif) -%}
+              {%- set hour = as_timestamp(item.start) | int -%}
+              {%- set ns.prices = ns.prices + [[hour, price]] -%}
+            {%- endfor -%}
+            {{ ns.prices }}
+          {%- endif -%}
+        tomorrow: >
+          {%- if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'raw_tomorrow') -%}
+            {%- set ns = namespace (prices=[]) -%}
+            {%- for item in state_attr('sensor.nordpool', 'raw_tomorrow') if item is defined -%}
+              {%- set tarif = float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[loop.index0]) -%}
+              {%- set price = 1.25 * float(item.value + tarif) -%}
+              {%- set hour = as_timestamp(item.start) | int -%}
+              {%- set ns.prices = ns.prices + [[hour, price]] -%}
+            {%- endfor -%}
+            {{ ns.prices }}
+          {%- endif %}
+
+- sensor:
+    - name: "Er el billig?"
+      icon: "mdi:meter-electric"
+      unique_id: "iselectricitycheap"
+      state: >
+        {% if states.sensor.electricity_cost.state | int < 2 %}
+        Ja
+        {% else %}
+        Nej
+        {%endif%}
+
+- sensor:
+    - name: "Bedste 3 timer i dag"
+      icon: "mdi:home-lightning-bolt-outline"
+      unique_id: "best3hourstoday"
+      state: >
+        {% set energyPriceSensor = "sensor.nordpool" %}
+        {% set priceData = namespace(numbers=[]) %}
+        {% for i in state_attr(energyPriceSensor,'raw_today') %}
+          {% set priceData.numbers = priceData.numbers + [i.value] %}
+        {% endfor %}
+        {% set three_consecutive_hours = namespace(numbers=[]) %}
+        {% set this_hour = now().hour %}
+        {% for n in range(this_hour,22) %}
+          {% set three_hour_sum = (priceData.numbers[n]+priceData.numbers[n+1]+priceData.numbers[n+2])|round(2) %}
+          {% set three_consecutive_hours.numbers = three_consecutive_hours.numbers + [three_hour_sum] %}
+        {% endfor %}
+        {% set min_three_hour = min(three_consecutive_hours.numbers) %}
+        {% set least_expensive_hours = this_hour + three_consecutive_hours.numbers.index(min_three_hour) %}    
+        {{ least_expensive_hours | int }}
+
+- sensor:
+    - name: "Bedste 3 timer i morgen"
+      icon: "mdi:home-lightning-bolt-outline"
+      unique_id: "best3hourstomorrow"
+      state: >
+        {% set energyPriceSensor = "sensor.nordpool" %}
+        {% set priceData = namespace(numbers=[]) %}
+        {% for i in state_attr(energyPriceSensor,'raw_tomorrow') %}
+          {% set priceData.numbers = priceData.numbers + [i.value] %}
+        {% endfor %}
+        {% set three_consecutive_hours = namespace(numbers=[]) %}
+        {% for n in range(0,22) %}
+          {% set three_hour_sum = (priceData.numbers[n]+priceData.numbers[n+1]+priceData.numbers[n+2])|round(2) %}
+          {% set three_consecutive_hours.numbers = three_consecutive_hours.numbers + [three_hour_sum] %}
+        {% endfor %}
+        {% set min_three_hour = min(three_consecutive_hours.numbers) %}
+        {% set least_expensive_hours = three_consecutive_hours.numbers.index(min_three_hour) %}    
+        {{ least_expensive_hours | int }}
+
+- sensor:
+    - name: "Bedste 3 timer i dag og i morgen"
+      icon: "mdi:home-lightning-bolt-outline"
+      unique_id: "Best3HoursOverall"
+      state: >
+        {% set energyPrice = "sensor.nordpool" %}
+        {% set energyPrice_prices = namespace(numbers=[]) %}
+        {% for n in state_attr(energyPrice, 'raw_today') %}
+          {% set energyPrice_prices.numbers = energyPrice_prices.numbers + [n.value] %}
+        {% endfor %}
+        {% for n in state_attr(energyPrice, 'raw_tomorrow') %}
+          {% set energyPrice_prices.numbers = energyPrice_prices.numbers + [n.value] %}
+        {% endfor %}
+        {% set energyPrice_cons_prices = namespace(numbers=[]) %}
+        {% set this_hour = now().hour %}
+        {% for n in range (this_hour,46) %}
+          {% if energyPrice_prices.numbers[n+2] != none %}
+            {% set sum_of_three = (energyPrice_prices.numbers[n] + energyPrice_prices.numbers[n+1] + energyPrice_prices.numbers[n+2])|round(2) %}
+            {% set energyPrice_cons_prices.numbers = energyPrice_cons_prices.numbers + [sum_of_three] %}
+          {% else %}
+            {% set energyPrice_cons_prices.numbers = energyPrice_cons_prices.numbers + [1000] %}
+          {% endif %}
+        {% endfor %}
+        {% set min_three_hour = min(energyPrice_cons_prices.numbers) %}
+        {% set best_3_cons_start_hour = this_hour + energyPrice_cons_prices.numbers.index(min_three_hour) %}
+        {% if best_3_cons_start_hour > 23 %}
+          {% set best_3_cons_start_hour = best_3_cons_start_hour - 24 %}
+        {% endif %}
+        {{ best_3_cons_start_hour | int }}
+
+- sensor:
+    - name: "Antal timer til billigst el"
+      icon: mdi:clock-alert
+      unique_id: "HoursTillCheapPower"
+      state: >
+        {% set besthour = "0" + states.sensor.bedste_3_timer_generelt.state + ":00"%}
+        {%set besthourtimestamp = today_at(besthour)%}
+        {% if state_attr('sensor.nordpool', 'tomorrow_valid')%}
+          {% if now().minute < 30 %}
+          {% set addHours = 24 %}
+          {% else %}
+            {%set addHours = 23 %}
+          {% endif %}
+        {% else %}
+          {% set addHours = 0 %}
+        {% endif %}
+        {% set omTimer = besthourtimestamp.hour - now().hour + addHours %}
+        {{omTimer}}
+
+- sensor:
+    - name: "Number of on lights"
+      icon: mdi:lightbulb-variant
+      unique_id: "NumberOfOnLights"
+      state: >
+        {% set lights = [
+          states.light.badevarelse,
+          states.light.verner_panton,
+          states.light.rispapir,
+          states.light.gang,
+          states.light.kokken,
+          states.light.kokkenbord,
+          states.light.sovevaerelse,
+          states.light.w_sengelampe,
+          states.light.g_sengelampe,
+          ] %}
+          {{ lights | selectattr('state','eq','on') | list | count }}
+
+- sensor:
+    - name: "Chosen playlist"
+      icon: mdi:music
+      unique_id: "ChosenPlaylist"
+      state: >
+        {% if is_state('input_select.media_to_play', 'Wienerbrød') %}
+          6VN0t0qqXZ9cVafL6hd029
+        {% elif is_state('input_select.media_to_play', 'G') %}
+          0jjj4NNEC1oMFwpNLIiyJb
+        {% elif is_state('input_select.media_to_play', 'Sort Sjæl') %}
+          0lUcmoPtSd0Pwx1YiVUaQQ
+        {% elif is_state('input_select.media_to_play', 'Jazz') %}
+          37i9dQZF1DWTcEjayzrZ4x
+        {% endif %}
+
+- sensor:
+    - name: "Chosen media player"
+      icon: mdi:radio
+      unique_id: "ChosenMediaPlayer"
+      state: >
+        {% if is_state('input_select.media_players', 'Lejlighed') %}
+          media_player.mass_lejlighed
+        {% elif is_state('input_select.media_players', 'Anlæg') %}
+          media_player.mass_anlaeg
+        {% elif is_state('input_select.media_players', 'Køkken') %}
+          media_player.mass_kokken
+        {% elif is_state('input_select.media_players', 'Badeværelse') %}
+          media_player.mass_badevaerelse_speaker
+        {% elif is_state('input_select.media_players', 'Soveværelse') %}
+          media_player.mass_sovevarelse
+        {% endif %}
+
+- sensor:
+    - name: "Next alarm - 15 minutes subtracted"
+      icon: mdi:clock-alert
+      unique_id: "NextAlarmMinus15Min"
+      state: >
+        {{ ((as_timestamp(states.sensor.sm_n986b_next_alarm.state)) - 900) | int | timestamp_custom('%D - %H:%M')}}
+
+- sensor:
+    - name: "IsNextAlarmNow"
+      icon: mdi:clock-check
+      unique_id: "IsNextAlarmNow"
+      state: >
+        {% if states.sensor.next_alarm_15_minutes_subtracted.state == (as_timestamp(now()) | int | timestamp_custom('%D - %H:%M')) %}
+          true
+        {% else %}
+          false
+        {% endif%}
