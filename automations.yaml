@@ -145,7 +145,7 @@
   - service: light.turn_on
     data: {}
     target:
-      entity_id: light.kokkenbord
+      entity_id: light.kitchen_table
   mode: single
 - id: '1609691894068'
   alias: "KITCHEN - \U0001F4A1 - Turn off kitchen table lights if no motion detected"
