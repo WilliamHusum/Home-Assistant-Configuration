@@ -243,7 +243,7 @@
 # Automations - Table of Content
 
 
-## [Lower thermostat temperature, when window is opened](https://github.com/WilliamHusum/config/blob/master/automations.yaml#:~:text=%2D%20id%3A%20%271673257664798%27)
+## [Lower thermostat temperature, when window is opened](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1252-L1293)
 When we open the window in the bedroom: 
  - Save the current temperature the thermostat is set to
  - Set the thermostat temperature to low (turn it off)
