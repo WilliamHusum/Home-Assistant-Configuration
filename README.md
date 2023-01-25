@@ -242,12 +242,19 @@
 
 # Automations - Table of Content
 
-
-## [Lower thermostat temperature, when window is opened](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1252-L1293)
+## Bedroom
+### [Lower thermostat temperature, when window is opened](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1252-L1293)
 When we open the window in the bedroom: 
  - Save the current temperature the thermostat is set to
  - Set the thermostat temperature to low (turn it off)
 When the window is closed again:
  - Retrieve the saved temperature
  - Set the thermostat temperature to the saved value
+
+## Mailbox
+### [If mail is delivered, set newMailToggle to true](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1-L16)
+Detect if new mail is delivered, based on a door/window sensor in the mailbox and set the newPostToggle to true
+
+
+
 
