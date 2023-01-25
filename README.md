@@ -253,8 +253,24 @@ When the window is closed again:
 
 ## Mailbox
 ### [If mail is delivered, set newMailToggle to true](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1-L16)
-Detect if new mail is delivered, based on a door/window sensor in the mailbox and set the newPostToggle to true
 
+
+### [If someone is home, while the mail is delivered, notify them]()
+
+Mail procedure: 
+ - Mailbox is opened, detected by a door/windows sensor on the mailbox latch
+ - NyPostToggle is set to true
+
+    - When NyPostToggle is set to true
+    - Run post_notify_person_home_of_new_mail script
+
+ - Mail script:
+    - Check if Gretha is home
+        - If she is, notify her via phone notification
+        - Turn off NyPostToggle
+    - Check if William is home
+        - If he is, notify him via phone notification
+        - Turn off NyPostToggle
 
 
 
