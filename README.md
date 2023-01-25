@@ -252,25 +252,22 @@ When the window is closed again:
  - Set the thermostat temperature to the saved value
 
 ## Mailbox
-### [If mail is delivered, set newMailToggle to true](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1-L16)
+### 
 
 
-### [If someone is home, while the mail is delivered, notify them]()
+### 
 
 Mail procedure: 
- - Mailbox is opened, detected by a door/windows sensor on the mailbox latch
- - NyPostToggle is set to true
+ - Mail is recieved (detected by door/window sensor)
+ - If someone is home, notify them and announce on speakers
+ - If noone was home:
+    - When the first person returns home, notify them of new mail
 
-    - When NyPostToggle is set to true
-    - Run post_notify_person_home_of_new_mail script
+Automations: 
+ - [If mail is delivered, set newMailToggle to true](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1-L16)
+ - []
 
- - Mail script:
-    - Check if Gretha is home
-        - If she is, notify her via phone notification
-        - Turn off NyPostToggle
-    - Check if William is home
-        - If he is, notify him via phone notification
-        - Turn off NyPostToggle
+
 
 
 
