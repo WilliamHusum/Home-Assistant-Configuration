@@ -195,7 +195,7 @@
     </tbody>
     <thead>
         <tr>
-            <th>Vacuum</th>
+            <th>Vacuum 🧹</th>
             <th>Units (#)</th>
         </tr>
     </thead>
