@@ -239,11 +239,21 @@
 - [Home Assistant Google Drive Backup](https://github.com/sabeechen/hassio-google-drive-backup) version 0.109.1 by @sabeechen
 
 # HACS plugins
+ ## Frontend
+ 
+
+ ## Integrations
+- [HACS](https://github.com/hacs/integration)
+- [nordpool](https://github.com/custom-components/nordpool)
+- [Eloverblik](https://github.com/JonasPed/homeassistant-eloverblik)
+- [Xiaomi Cloud Map Extractor](https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor)
+- [Music Assistant](https://github.com/music-assistant/hass-music-assistant)
+- [Fuelprices DK](https://github.com/J-Lindvig/Fuelprices_DK)
 
 # Automations - Table of Content
 
 ## Bedroom
-### [Lower thermostat temperature, when window is opened](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1252-L1293)
+### Lower thermostat temperature, when window is opened
 When we open the window in the bedroom: 
  - Save the current temperature the thermostat is set to
  - Set the thermostat temperature to low (turn it off)
@@ -251,12 +261,26 @@ When the window is closed again:
  - Retrieve the saved temperature
  - Set the thermostat temperature to the saved value
 
+ Automations: 
+ - [If window is opened, save current temperature and
+    lower thermotstat temperature](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1252-L1274)
+- [When window is closed again, set thermostat to
+    old value](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1275-L1293)
+
+### Alarm
+15 minutes before the morning alarm goes off, our bedside lamps will slowly turn on.
+
+Automation:
+ - [Slowly turn on lights before alarm](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L981-L1004)
+
+ Script: 
+ - [Slowly turn on the lights](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/scripts.yaml#L186-L213)
+
+Templates used:
+- [Next alarm - 15 minutes subtracted, IsNextAlarmNow](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/templates.yaml#L181-L197)
+
+
 ## Mailbox
-### 
-
-
-### 
-
 Mail procedure: 
  - Mail is recieved (detected by door/window sensor)
  - If someone is home, notify them and announce on speakers
@@ -265,7 +289,13 @@ Mail procedure:
 
 Automations: 
  - [If mail is delivered, set newMailToggle to true](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1-L16)
- - []
+ - [When NyPostToggle is turned on, announce on speakers](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/automations.yaml#L1367-L1393)
+ - [When NyPostToggle is turned on, run post script](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/automations.yaml#L1326-L1344)
+ - [When someone arrives home, run post script](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/automations.yaml#L1345-L1366)
+ - [Mail script](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/scripts.yaml#L244-L275)
+
+ ## Living Room
+
 
 
 
