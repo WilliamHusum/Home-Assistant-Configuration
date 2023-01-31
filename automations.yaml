@@ -983,7 +983,7 @@
   trigger:
   - platform: state
     entity_id:
-    - sensor.next_alarm_trigger_now
+    - sensor.isnextalarmnow
     to: 'true'
   condition:
   - condition: time
@@ -1390,4 +1390,31 @@
     data: {}
     target:
       entity_id: input_boolean.nyposttoggle
+  mode: single
+- id: '1674802838168'
+  alias: "BEDROOM - \U0001F39A  - Bed, Swtich - Turn off all lights, except bedside
+    lamps"
+  description: ''
+  trigger:
+  - device_id: 7eaf76f7145d11ebb0ba97b579ce4cf1
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: dim_down
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.alle_lys
+  - service: light.turn_on
+    data:
+      brightness_pct: 40
+    target:
+      entity_id: light.sengelamper
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.sleepmode
   mode: single
