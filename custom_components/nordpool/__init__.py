@@ -20,7 +20,11 @@ DOMAIN = "nordpool"
 _LOGGER = logging.getLogger(__name__)
 RANDOM_MINUTE = randint(10, 30)
 RANDOM_SECOND = randint(0, 59)
-EVENT_NEW_DATA = "nordpool_update"
+EVENT_NEW_HOUR = "nordpool_update_hour"
+EVENT_NEW_DAY = "nordpool_update_day"
+EVENT_NEW_PRICE = "nordpool_update_new_price"
+SENTINEL = object()
+
 _CURRENCY_LIST = ["DKK", "EUR", "NOK", "SEK"]
 
 
@@ -28,7 +32,7 @@ CONFIG_SCHEMA = vol.Schema({DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA)
 
 
 NAME = DOMAIN
-VERSION = "0.0.10"
+VERSION = "0.0.11"
 ISSUEURL = "https://github.com/custom-components/nordpool/issues"
 
 STARTUP = f"""
@@ -74,8 +78,8 @@ class NordpoolData:
                 async_call_later(hass, 20, partial(self._update, type_=type_, dt=dt))
 
     async def update_today(self, _: datetime):
-        """Update todays prices"""
-        _LOGGER.debug("Updating tomorrows prices.")
+        """Update today's prices"""
+        _LOGGER.debug("Updating today's prices.")
         await self._update("today")
 
     async def update_tomorrow(self, _: datetime):
@@ -100,7 +104,7 @@ class NordpoolData:
 
             # Send a new data request after new data is updated for this first run
             # This way if the user has multiple sensors they will all update
-            async_dispatcher_send(self._hass, EVENT_NEW_DATA)
+            async_dispatcher_send(self._hass, EVENT_NEW_HOUR)
 
         return self._data.get(currency, {}).get(day, {}).get(area)
 
@@ -127,18 +131,18 @@ async def _dry_setup(hass: HomeAssistant, _: Config) -> bool:
             _LOGGER.debug("Called new_day_cb callback")
 
             for curr in api.currency:
-                if not len(api._data[curr]["tomorrow"]):
+                if not api._data[curr]["tomorrow"]:
                     api._data[curr]["today"] = await api.update_today(None)
                 else:
                     api._data[curr]["today"] = api._data[curr]["tomorrow"]
                 api._data[curr]["tomorrow"] = {}
 
-            async_dispatcher_send(hass, EVENT_NEW_DATA)
+            async_dispatcher_send(hass, EVENT_NEW_DAY)
 
         async def new_hr(_):
             """Callback to tell the sensors to update on a new hour."""
             _LOGGER.debug("Called new_hr callback")
-            async_dispatcher_send(hass, EVENT_NEW_DATA)
+            async_dispatcher_send(hass, EVENT_NEW_HOUR)
 
         async def new_data_cb(tdo):
             """Callback to fetch new data for tomorrows prices at 1300ish CET
@@ -146,7 +150,7 @@ async def _dry_setup(hass: HomeAssistant, _: Config) -> bool:
             """
             # _LOGGER.debug("Called new_data_cb")
             await api.update_tomorrow(tdo)
-            async_dispatcher_send(hass, EVENT_NEW_DATA)
+            async_dispatcher_send(hass, EVENT_NEW_PRICE)
 
         # Handles futures updates
         cb_update_tomorrow = async_track_time_change_in_tz(

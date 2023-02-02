@@ -89,6 +89,11 @@
     data:
       message: enter
       title: OK
+    enabled: false
+  - service: notify.mobile_app_williams_s23_ultra
+    data:
+      message: enter
+      title: OK
   mode: single
 - id: '1605705437982'
   alias: "PHONE - \U0001F4F1 - Unmute phone when leaving work"
@@ -100,7 +105,7 @@
     event: leave
   condition: []
   action:
-  - service: notify.mobile_app_sm_n986b
+  - service: notify.mobile_app_williams_s23_ultra
     data:
       message: leave
       title: OK
@@ -165,7 +170,7 @@
   - service: light.turn_off
     data: {}
     target:
-      entity_id: light.kokkenbord
+      entity_id: light.kitchen_table
   mode: single
 - id: '1616532813124'
   alias: "KITCHEN - \U0001F4A1 - Motion detected, turn on the lights"
@@ -736,7 +741,7 @@
   description: When phone's set to DND, sync it to tablet and set it to DND as well
   trigger:
   - platform: state
-    entity_id: sensor.sm_n986b_do_not_disturb_sensor
+    entity_id: sensor.williams_s23_ultra_do_not_disturb_sensor
     to: priority_only
   condition: []
   action:
@@ -750,7 +755,8 @@
   description: When phone's set to DND, sync it to tablet and set it to DND as well
   trigger:
   - platform: state
-    entity_id: sensor.sm_n986b_do_not_disturb_sensor
+    entity_id:
+    - sensor.williams_s23_ultra_do_not_disturb_sensor
     to: 'off'
   condition: []
   action:
@@ -861,7 +867,7 @@
     - mon
     - tue
   action:
-  - service: notify.mobile_app_sm_n986b
+  - service: notify.mobile_app_williams_s23_ultra
     data:
       message: Husk at tømme kattebakken
       title: Velkommen hjem!
@@ -887,9 +893,6 @@
     data: {}
     target:
       entity_id: input_boolean.kattebakke_tomt
-  - service: notify.mobile_app_tablet
-    data:
-      message: Hej
   mode: single
 - id: '1664955768809'
   alias: "LOCATION - \U0001F4CC - When I leave work, turn on LeftWorkToggle"

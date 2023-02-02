@@ -263,7 +263,7 @@ post_notify_person_home_of_new_mail:
         entity_id: person.william
         state: home
       then:
-      - service: notify.mobile_app_sm_n986b
+      - service: notify.mobile_app_williams_s23_ultra
         data:
           message: Der er kommet post
           title: POST
