@@ -183,7 +183,7 @@
       icon: mdi:clock-alert
       unique_id: "NextAlarmMinus15Min"
       state: >
-        {{ ((as_timestamp(states.sensor.sm_n986b_next_alarm.state)) - 900) | int | timestamp_custom('%D - %H:%M')}}
+        {{ ((as_timestamp(states.sensor.williams_s23_ultra_next_alarm.state)) - 900) | int | timestamp_custom('%D - %H:%M')}}
 
 - sensor:
     - name: "IsNextAlarmNow"
