@@ -1,4 +1,4 @@
-# William Husum Home Assistant config files
+# William Husum Home Assistant config files (WIP)
 
 ## My devices
 
