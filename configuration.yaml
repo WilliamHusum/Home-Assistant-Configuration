@@ -55,7 +55,18 @@ notify:
   - platform: html5
     vapid_pub_key: !secret vapid_pub_key
     vapid_prv_key: !secret vapid_prv_key
-    vapid_email: !secret husum44@gmail.com
+    vapid_email: !secret vapid_email
+
+panel_custom:
+  - name: Automations
+    sidebar_title: Automations
+    sidebar_icon: mdi:cog-transfer
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: config/automation/dashboard
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
 
 #-----------------------SENSORS ------------------------------------------
 sensor:
