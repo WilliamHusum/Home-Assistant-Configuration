@@ -100,14 +100,6 @@ sensor:
     max_age:
       days: 30
 
-  - platform: statistics
-    entity_id: sensor.eloverblik_energy_total
-    name: Eloverblik Monthly Statistics
-    sampling_size: 50
-    state_characteristic: mean
-    max_age:
-      days: 30
-
   - platform: darksky
     api_key: !secret dark_sky_api_key
     forecast:
