@@ -186,6 +186,10 @@
             <td>1</td>
         <tr>
         <tr>
+            <td>Samsung Galaxy S23 Ultra</td>
+            <td>1</td>
+        <tr>
+        <tr>
             <td>Samsung Galaxy Tab S8+</td>
             <td>1</td>
         <tr>
