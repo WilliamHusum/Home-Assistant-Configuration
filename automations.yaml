@@ -110,32 +110,6 @@
       message: leave
       title: OK
   mode: single
-- id: '1608820379175'
-  alias: "BEDROOM - \U0001F98E - Turn on Yes cage lights"
-  description: ''
-  trigger:
-  - platform: time
-    at: 07:30:00
-  condition: []
-  action:
-  - type: turn_on
-    device_id: 2935033c3fd88235d07015e237833ea1
-    entity_id: switch.terrarie
-    domain: switch
-  mode: single
-- id: '1608820416405'
-  alias: "BEDROOM - \U0001F98E - Turn off Yes cage lights"
-  description: ''
-  trigger:
-  - platform: time
-    at: '21:30:00'
-  condition: []
-  action:
-  - type: turn_off
-    device_id: 2935033c3fd88235d07015e237833ea1
-    entity_id: switch.terrarie
-    domain: switch
-  mode: single
 - id: '1609691683990'
   alias: "KITCHEN - \U0001F4A1 - Motion detected on kitchen table, turn on lights"
   description: ''
@@ -1420,4 +1394,25 @@
     target:
       entity_id:
       - input_boolean.sleepmode
+  mode: single
+- id: '1675700917814'
+  alias: "WORK - \U0001F9D1‍\U0001F4BC - When I turn on the car at work, notify Gretha"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.williams_s23_ultra_android_auto
+    to: 'on'
+  condition:
+  - condition: zone
+    entity_id: person.william
+    zone: zone.ok_w_arbejde
+  - condition: zone
+    entity_id: person.gretha
+    zone: zone.elisa_g_arbejde
+  action:
+  - service: notify.html5_g_s_arbejdscomputer
+    data:
+      message: Jeg har tændt bilen og kører fra arbejde nu
+      title: "\U0001F697\U0001F695\U0001F698\U0001F3CE️"
   mode: single
