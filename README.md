@@ -1,4 +1,4 @@
-# William Husum Home Assistant config files
+# William Husum Home Assistant config files (WIP)
 
 ## My devices
 
@@ -186,6 +186,10 @@
             <td>1</td>
         <tr>
         <tr>
+            <td>Samsung Galaxy S23 Ultra</td>
+            <td>1</td>
+        <tr>
+        <tr>
             <td>Samsung Galaxy Tab S8+</td>
             <td>1</td>
         <tr>
@@ -267,6 +271,20 @@ When the window is closed again:
 - [When window is closed again, set thermostat to
     old value](https://github.com/WilliamHusum/config/blob/af480e73ccd3be2885eca848363a7d6c71b1d04c/automations.yaml#L1275-L1293)
 
+
+### Button above bed
+ - Toggle each bedlight
+ - Hold to turn off all lights and set NightMode
+ - Hold other button to turn off all lights and set NightMode and turn on bedside lights
+
+ ### Switch
+  - Turn on all bedroom lights
+  - Turn off all bedroom lights
+  - Toggle bedlights
+
+ ### Deprecated: 
+- When underwear drawer is opened between 6-8, play todays weather etc on bedroom speaker
+
 ### Alarm
 15 minutes before the morning alarm goes off, our bedside lamps will slowly turn on.
 
@@ -295,9 +313,65 @@ Automations:
  - [Mail script](https://github.com/WilliamHusum/config/blob/7aabed2e42f2e65c0b2cedc6cf4ca967ddb51ef8/scripts.yaml#L244-L275)
 
  ## Living Room
+ - If motion is detected turn on lights
+ - If FP1 stops detecting occupancy, turn off lights
+
+ - If TV is on (smartplug power is above 60 W) turn on lights behind TV
+
+Switch
+ - Turn off living room lights
+ - Turn on living room lights
+ - Start moviemode (low lights)
+
+ ## Kitchen
+  - Ceiling light turned on by motion
+  - Cupboard lights turned on by motion sensor under cupboards
+
+  - Ask Google when the dishwasher should be turned on (when electricity is cheapest during the night)
 
 
+## Bathroom
+ - When humidity is over xx, turn on shower mode
+ - Showermode = light doesn't turn off for 30 minutes
+ - When motion in bedroom, turn on lights and spotify playlist
+    - After 4 minutes of no motion, flash the lights, wait 30 seconds, if still no motion turn off the lights.
+- Bathroom switch
+    - Turn lights on
+    - Turn lights off
+    - Turn lights on and play G playlist
+    - Turn lights on and play W playlist
+    - Set LitterboxToggle
+
+## Litterbox
+- When I arrive home from work, send an actionable notification reminding me to empty the litterbox, with two buttons:
+    - Snooze for an hour and resend notification
+    - Done: mark in calendar that litterbox has been emptied
 
 
+## Hallway
+Button by the frontdoor
+ - Turn off all lights
+    - If the sun has set, turn on a lamp for the cats
 
+## Vacuum
+ - On weekdays at 10, if noone is home, vacuum the apartment
+ - On wednesdays, go to the trashcan, to be emptied
 
+## Lights
+All lights are controlled by motion except for in the bedroom.
+Between 22:30 and 6:00, the lights turn on dimmed.
+
+## Work
+- When I arrive at work, send notification to Tasker which then mutes phone
+- When I leave work, send notification to Tasker which then unmutes phone
+- When I turn on the car and connect to Android Auto, send notification to Grethas work PC
+
+## Phone
+- When Do Not Disturb is toggled, send notification to tablet (Tasker), which syncs DND mode to the tablet. 
+
+## Maintenance 
+- Reset toggles at midnight
+- Restart Home Assistant
+- Contractor mode - disable auto lights to keep them on
+- Sleep mode - disable auto lights in living room to keep them off during the night
+- At 6:30 turn off sleep mode (for when the alarm is not set)
