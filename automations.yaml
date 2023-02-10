@@ -31,7 +31,7 @@
   action:
   - type: turn_off
     device_id: 50f864ca096c11eb816e8f077f82dfc0
-    entity_id: light.kokken
+    entity_id: light.kitchen_light
     domain: light
   mode: single
 - id: '1602058777822'
@@ -164,13 +164,13 @@
     then:
     - type: turn_on
       device_id: 50f864ca096c11eb816e8f077f82dfc0
-      entity_id: light.kokken
+      entity_id: light.kitchen_light
       domain: light
-      brightness_pct: 35
+      brightness_pct: 30
     else:
     - type: turn_on
       device_id: 50f864ca096c11eb816e8f077f82dfc0
-      entity_id: light.kokken
+      entity_id: light.kitchen_light
       domain: light
       brightness_pct: 100
   mode: single
@@ -626,8 +626,8 @@
   condition: []
   action:
   - type: turn_off
-    device_id: 8b065f67096b11ebab3141643c8a446f
-    entity_id: light.rispapir
+    device_id: 4b1a44b54e3b525963457a5168922792
+    entity_id: light.dining_table
     domain: light
   - type: turn_off
     device_id: 0fffdb08160811ebb610515f85f5503d
@@ -646,8 +646,8 @@
   condition: []
   action:
   - type: turn_on
-    device_id: 8b065f67096b11ebab3141643c8a446f
-    entity_id: light.rispapir
+    device_id: 4b1a44b54e3b525963457a5168922792
+    entity_id: light.dining_table
     domain: light
     brightness_pct: 100
   - type: turn_on
@@ -673,7 +673,7 @@
     domain: light
   mode: single
 - id: '1645867195792'
-  alias: "LIVING ROOM - \U0001F39A️ - Switch, press dim up to toggle rispapir"
+  alias: "LIVING ROOM - \U0001F39A️ - Switch, press dim up to toggle dining table"
   description: ''
   trigger:
   - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
@@ -684,8 +684,8 @@
   condition: []
   action:
   - type: toggle
-    device_id: 8b065f67096b11ebab3141643c8a446f
-    entity_id: light.rispapir
+    device_id: 4b1a44b54e3b525963457a5168922792
+    entity_id: light.dining_table
     domain: light
   mode: single
 - id: '1645867244165'
@@ -700,10 +700,10 @@
   condition: []
   action:
   - type: turn_on
-    device_id: 8b065f67096b11ebab3141643c8a446f
-    entity_id: light.rispapir
+    device_id: 4b1a44b54e3b525963457a5168922792
+    entity_id: light.dining_table
     domain: light
-    brightness_pct: 40
+    brightness_pct: 35
   - type: turn_on
     device_id: 0fffdb08160811ebb610515f85f5503d
     entity_id: light.verner_panton
@@ -1056,8 +1056,8 @@
     data: {}
     target:
       device_id:
-      - 8b065f67096b11ebab3141643c8a446f
       - 0fffdb08160811ebb610515f85f5503d
+      - 4b1a44b54e3b525963457a5168922792
   mode: single
 - id: '1666869877117'
   alias: "LIVING ROOM - \U0001F4A1 - When motion detected, turn on lights"
@@ -1075,7 +1075,7 @@
     domain: binary_sensor
   condition:
   - condition: state
-    entity_id: light.rispapir
+    entity_id: light.dining_table
     state: 'off'
   action:
   - service: light.turn_on
@@ -1083,16 +1083,16 @@
       brightness_pct: 100
     target:
       device_id:
-      - 8b065f67096b11ebab3141643c8a446f
       - 0fffdb08160811ebb610515f85f5503d
+      - 4b1a44b54e3b525963457a5168922792
   - if:
     - condition: state
       entity_id: schedule.nighttime
       state: 'on'
     then:
     - type: turn_on
-      device_id: 8b065f67096b11ebab3141643c8a446f
-      entity_id: light.rispapir
+      device_id: 4b1a44b54e3b525963457a5168922792
+      entity_id: light.dining_table
       domain: light
       brightness_pct: 35
     - type: turn_on
@@ -1102,8 +1102,8 @@
       brightness_pct: 35
     else:
     - type: turn_on
-      device_id: 8b065f67096b11ebab3141643c8a446f
-      entity_id: light.rispapir
+      device_id: 4b1a44b54e3b525963457a5168922792
+      entity_id: light.dining_table
       domain: light
       brightness_pct: 100
     - type: turn_on

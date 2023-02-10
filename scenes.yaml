@@ -1,16 +1,6 @@
 - id: '1665427099267'
   name: Living Room Movie Mode
   entities:
-    light.rispapir:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 51
-      off_with_transition: false
-      off_brightness:
-      friendly_name: Rispapir
-      supported_features: 40
-      state: 'on'
     light.verner_panton:
       min_color_temp_kelvin: 2202
       max_color_temp_kelvin: 6535
@@ -18,6 +8,10 @@
       max_mireds: 454
       supported_color_modes:
       - color_temp
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Verner Panton
+      supported_features: 40
       color_mode: color_temp
       brightness: 51
       color_temp_kelvin: 2202
@@ -32,10 +26,16 @@
       xy_color:
       - 0.579
       - 0.388
+      state: 'on'
+    light.dining_table:
+      supported_color_modes:
+      - brightness
       off_with_transition: false
       off_brightness:
-      friendly_name: Verner Panton
+      friendly_name: Dining Table
       supported_features: 40
+      color_mode: brightness
+      brightness: 51
       state: 'on'
   icon: mdi:movie-filter-outline
   metadata: {}
@@ -149,14 +149,6 @@
 - id: '1667681976814'
   name: Bedroom Night Time
   entities:
-    light.sovevarelse:
-      supported_color_modes:
-      - onoff
-      off_with_transition: false
-      off_brightness:
-      friendly_name: Soveværelse
-      supported_features: 8
-      state: 'off'
     light.g_sengelampe:
       min_color_temp_kelvin: 2202
       max_color_temp_kelvin: 4000
@@ -164,10 +156,6 @@
       max_mireds: 454
       supported_color_modes:
       - color_temp
-      off_with_transition: false
-      off_brightness:
-      friendly_name: G sengelampe
-      supported_features: 40
       color_mode: color_temp
       brightness: 102
       color_temp_kelvin: 2785
@@ -182,6 +170,10 @@
       xy_color:
       - 0.517
       - 0.386
+      off_with_transition: false
+      off_brightness:
+      friendly_name: G sengelampe
+      supported_features: 40
       state: 'on'
     light.w_sengelampe:
       min_color_temp_kelvin: 2202
@@ -190,10 +182,6 @@
       max_mireds: 454
       supported_color_modes:
       - color_temp
-      off_with_transition: false
-      off_brightness:
-      friendly_name: W sengelampe
-      supported_features: 40
       color_mode: color_temp
       brightness: 102
       color_temp_kelvin: 2785
@@ -208,7 +196,19 @@
       xy_color:
       - 0.517
       - 0.386
+      off_with_transition: false
+      off_brightness:
+      friendly_name: W sengelampe
+      supported_features: 40
       state: 'on'
+    light.bedroom:
+      supported_color_modes:
+      - brightness
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Bedroom
+      supported_features: 40
+      state: 'off'
   icon: mdi:moon-waning-crescent
   metadata: {}
 - id: '1667686579277'
