@@ -625,14 +625,10 @@
     subtype: turn_off
   condition: []
   action:
-  - type: turn_off
-    device_id: 4b1a44b54e3b525963457a5168922792
-    entity_id: light.dining_table
-    domain: light
-  - type: turn_off
-    device_id: 0fffdb08160811ebb610515f85f5503d
-    entity_id: light.verner_panton
-    domain: light
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.living_room
   mode: single
 - id: '1645867094133'
   alias: "LIVING ROOM - \U0001F39A️ - Switch, turn on living room lights "
@@ -645,16 +641,11 @@
     subtype: turn_on
   condition: []
   action:
-  - type: turn_on
-    device_id: 4b1a44b54e3b525963457a5168922792
-    entity_id: light.dining_table
-    domain: light
-    brightness_pct: 100
-  - type: turn_on
-    device_id: 0fffdb08160811ebb610515f85f5503d
-    entity_id: light.verner_panton
-    domain: light
-    brightness_pct: 100
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.living_room
   mode: single
 - id: '1645867165399'
   alias: "LIVING ROOM - \U0001F39A️ - Switch, press dim down to toggle Verner Panton"
@@ -709,6 +700,11 @@
     entity_id: light.verner_panton
     domain: light
     brightness_pct: 40
+  - service: light.turn_on
+    data:
+      brightness_pct: 30
+    target:
+      entity_id: light.living_room
   mode: single
 - id: '1647375697324'
   alias: "PHONE - \U0001F4F1 - Tablet and phone DND sync on"
@@ -1055,9 +1051,7 @@
   - service: light.turn_off
     data: {}
     target:
-      device_id:
-      - 0fffdb08160811ebb610515f85f5503d
-      - 4b1a44b54e3b525963457a5168922792
+      entity_id: light.living_room
   mode: single
 - id: '1666869877117'
   alias: "LIVING ROOM - \U0001F4A1 - When motion detected, turn on lights"
@@ -1082,35 +1076,25 @@
     data:
       brightness_pct: 100
     target:
-      device_id:
-      - 0fffdb08160811ebb610515f85f5503d
-      - 4b1a44b54e3b525963457a5168922792
+      entity_id: light.living_room
+    enabled: false
   - if:
     - condition: state
       entity_id: schedule.nighttime
       state: 'on'
     then:
-    - type: turn_on
-      device_id: 4b1a44b54e3b525963457a5168922792
-      entity_id: light.dining_table
-      domain: light
-      brightness_pct: 35
-    - type: turn_on
-      device_id: 0fffdb08160811ebb610515f85f5503d
-      entity_id: light.verner_panton
-      domain: light
-      brightness_pct: 35
+    - service: light.turn_on
+      data:
+        brightness_pct: 35
+      target:
+        entity_id: light.living_room
     else:
-    - type: turn_on
-      device_id: 4b1a44b54e3b525963457a5168922792
-      entity_id: light.dining_table
-      domain: light
-      brightness_pct: 100
-    - type: turn_on
-      device_id: 0fffdb08160811ebb610515f85f5503d
-      entity_id: light.verner_panton
-      domain: light
-      brightness_pct: 100
+    - service: light.turn_on
+      data:
+        brightness_pct: 100
+      target:
+        entity_id: light.living_room
+    enabled: true
   mode: single
 - id: '1667982697940'
   alias: "MAINTENANCE - \U0001F527 - When SleepMode is turned on, turn off automations"

@@ -81,7 +81,7 @@ sensor:
     entity_id: person.william
     state: "home"
     type: time
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ (now()-86400) }}"
     end: "{{ now() }}"
 
   - platform: history_stats
@@ -89,7 +89,7 @@ sensor:
     entity_id: person.gretha
     state: "home"
     type: time
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ (now()-86400) }}"
     end: "{{ now() }}"
 
   - platform: statistics
@@ -120,6 +120,32 @@ sensor:
       hours: 0
       minutes: 3
       seconds: 30
+
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /config
+      - type: disk_use
+      - type: disk_free
+      - type: memory_use_percent
+      - type: load_1m
+      - type: load_5m
+      - type: load_15m
+      - type: ipv4_address
+        arg: eth0
+      - type: processor_use
+      - type: processor_temperature
+      - type: last_boot
+
+  - platform: unifigateway
+    host: unifi
+    username: !secret unifi_username
+    password: !secret unifi_password
+    monitored_conditions:
+      - www
+      - wlan
+      - alerts
+      - firmware
 
 automation: !include automations.yaml
 script: !include scripts.yaml
