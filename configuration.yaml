@@ -19,7 +19,7 @@ fuelprices_dk:
     - shell
     - circlek
     - f24
-    - goon
+    #- goon
     - ingo
     - oil
     - q8
@@ -136,16 +136,6 @@ sensor:
       - type: processor_use
       - type: processor_temperature
       - type: last_boot
-
-  - platform: unifigateway
-    host: unifi
-    username: !secret unifi_username
-    password: !secret unifi_password
-    monitored_conditions:
-      - www
-      - wlan
-      - alerts
-      - firmware
 
 automation: !include automations.yaml
 script: !include scripts.yaml
