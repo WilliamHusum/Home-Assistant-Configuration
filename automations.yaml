@@ -398,16 +398,6 @@
   - platform: time
     at: '10:00:00'
   condition:
-  - condition: device
-    device_id: 80e4fe67fb2e11ea9f1a95fe17b7b65d
-    domain: device_tracker
-    entity_id: device_tracker.grethas_iphone7
-    type: is_not_home
-  - condition: device
-    device_id: 7e92a6a1fa0a11eaa70e2fad81a79ac0
-    domain: device_tracker
-    entity_id: device_tracker.sm_n986b
-    type: is_not_home
   - condition: time
     weekday:
     - mon
@@ -417,11 +407,24 @@
     - fri
     before: 00:00:00
     after: 00:00:00
+  - condition: not
+    conditions:
+    - condition: zone
+      entity_id: person.william
+      zone: zone.home
+    - condition: zone
+      entity_id: person.gretha
+      zone: zone.home
   action:
-  - device_id: 3395b043028e5ff0056eb1febf9ea385
-    domain: vacuum
-    entity_id: vacuum.roborock_s5_max
-    type: clean
+  - service: roborock.vacuum_clean_segment
+    data:
+      segments:
+      - '16'
+      - '21'
+      - '23'
+      - '18'
+    target:
+      entity_id: vacuum.roborock_s5_max
   mode: single
 - id: '1635268414740'
   alias: "VACUUM - \U0001F9F9 - On wednesdays, go to trashcan"
@@ -442,6 +445,12 @@
       y_coord: '18687'
     target:
       device_id: 3395b043028e5ff0056eb1febf9ea385
+  - service: roborock.vacuum_goto
+    data:
+      y_coord: '29046'
+      x_coord: '18510'
+    target:
+      entity_id: vacuum.roborock_s5_max
   mode: single
 - id: '1639592815942'
   alias: BATHROOM - ⚙️- Turn off ShowerToggle, after 30 minutes
