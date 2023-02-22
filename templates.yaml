@@ -195,3 +195,10 @@
         {% else %}
           false
         {% endif%}
+
+- sensor:
+    - name: "DaysTillBirth"
+      icon: mdi:baby
+      unique_id: "DaysTillBirth"
+      state: >
+        {{ ((state_attr('input_datetime.termin', 'timestamp') - as_timestamp(now()))  / 86400) | round()}}
