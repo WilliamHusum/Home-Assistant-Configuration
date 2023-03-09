@@ -87,7 +87,7 @@ sensor:
     entity_id: person.william
     state: "home"
     type: time
-    start: "{{ (now()-86400) }}"
+    start: "{{ (now()-86400) | timestamp_custom('%H:%M', false)}}"
     end: "{{ now() }}"
 
   - platform: history_stats

@@ -280,19 +280,20 @@
     - condition: state
       entity_id: media_player.mass_badevaerelse_speaker
       state: playing
+      enabled: false
   action:
   - service: media_player.volume_set
     data:
       volume_level: 0.2
     target:
-      entity_id: media_player.mass_badevaerelse_speaker
+      entity_id: media_player.badevaerelse_speaker
   - service: media_player.play_media
     data:
       media_content_id: spotify:playlist:37i9dQZF1DWTcEjayzrZ4x
       media_content_type: playlist
       enqueue: replace
     target:
-      entity_id: media_player.mass_badevaerelse_speaker
+      entity_id: media_player.badevaerelse_speaker
   mode: single
 - id: '1631543656957'
   alias: "BATHROOM - \U0001F3B5 - Turn off music"
@@ -315,11 +316,15 @@
   - service: media_player.media_stop
     data: {}
     target:
-      entity_id: media_player.mass_badevaerelse_speaker
+      entity_id:
+      - media_player.mass_badevaerelse_speaker
+      - media_player.badevaerelse_speaker
   - service: media_player.turn_off
     data: {}
     target:
-      entity_id: media_player.mass_badevaerelse_speaker
+      entity_id:
+      - media_player.mass_badevaerelse_speaker
+      - media_player.badevaerelse_speaker
   mode: single
 - id: '1631545558179'
   alias: "BATHROOM - \U0001F39A️ - Switch, turn lights on "
@@ -439,16 +444,10 @@
     before: 00:00:00
     after: 00:00:00
   action:
-  - service: xiaomi_miio.vacuum_goto
-    data:
-      x_coord: '23549'
-      y_coord: '18687'
-    target:
-      device_id: 3395b043028e5ff0056eb1febf9ea385
   - service: roborock.vacuum_goto
     data:
-      x_coord: '18510'
-      y_coord: '29046'
+      x_coord: '18581'
+      y_coord: '29116'
     target:
       entity_id: vacuum.roborock_s5_max
   mode: single
@@ -1423,4 +1422,65 @@
         \U0001F476\U0001F3FB"
       title: Nedtælling
       target: '#baby'
+  mode: single
+- id: '1678346637648'
+  alias: "MAINTENANCE - \U0001F527 - When NotHomeToggle is on, disable auto lights"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.nothometoggle
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.alle_lys
+  - service: homeassistant.turn_off
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.badevaerelse_turn_on_lights
+      - automation.living_room_when_motion_detected_turn_on_lights
+      - automation.01_taend_lys_i_kokkenet
+  mode: single
+- id: '1678346698323'
+  alias: "MAINTENANCE - \U0001F527 - When NotHomeToggle is off, turn on auto lights"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.nothometoggle
+    to: 'off'
+  condition: []
+  action:
+  - service: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id:
+      - automation.03_afspil_jazz_badevaerelse
+      - automation.badevaerelse_turn_on_lights
+      - automation.living_room_when_motion_detected_turn_on_lights
+      - automation.01_taend_lys_i_kokkenet
+  mode: single
+- id: '1678346881191'
+  alias: "MAINTENANCE - \U0001F527 -  When we arrive home, disable NotHomeToggle"
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.gretha
+    zone: zone.home
+    event: enter
+  - platform: zone
+    entity_id: person.william
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.nothometoggle
   mode: single
