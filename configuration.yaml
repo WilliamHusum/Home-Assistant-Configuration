@@ -82,21 +82,21 @@ sensor:
       - "date"
       - "date_time"
 
-  - platform: history_stats
-    name: W home time
-    entity_id: person.william
-    state: "home"
-    type: time
-    start: "{{ (now()-86400) | timestamp_custom('%H:%M', false)}}"
-    end: "{{ now() }}"
+  # - platform: history_stats
+  #   name: W home time
+  #   entity_id: person.william
+  #   state: "home"
+  #   type: time
+  #   start: "{{ (now()-86400) | int | timestamp_custom('%H:%M')}}"
+  #   end: "{{ now() }}"
 
-  - platform: history_stats
-    name: G home time
-    entity_id: person.gretha
-    state: "home"
-    type: time
-    start: "{{ (now()-86400) }}"
-    end: "{{ now() }}"
+  # - platform: history_stats
+  #   name: G home time
+  #   entity_id: person.gretha
+  #   state: "home"
+  #   type: time
+  #   start: "{{ (now()-86400) | int | timestamp_custom('%H:%M')}}"
+  #   end: "{{ now() }}"
 
   - platform: statistics
     entity_id: sensor.eloverblik_energy_total
@@ -142,6 +142,15 @@ sensor:
       - type: processor_use
       - type: processor_temperature
       - type: last_boot
+
+  - platform: imap_email_content
+    server: imap.gmail.com
+    port: 993
+    username: !secret gmail_username
+    password: !secret gmail_password
+    folder: OK kvittering
+    senders:
+      - !secret gmail_sender
 
 automation: !include automations.yaml
 script: !include scripts.yaml

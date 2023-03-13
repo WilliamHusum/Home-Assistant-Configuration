@@ -202,3 +202,20 @@
       unique_id: "DaysTillBirth"
       state: >
         {{ ((state_attr('input_datetime.termin', 'timestamp') - as_timestamp(now()))  / 86400) | round(0, 'ceil')}}
+
+# - sensor:
+#   - name: "Liters of fuel"
+#     unit_of_measurement: "liter"
+#     state: >
+#       {{ state_attr('sensor.energy_email','body')
+#         | regex_findall_index("\*Yesterday's Energy Use:\* ([0-9]+) kWh") }}
+#   - name: "Previous Day Cost"
+#     unit_of_measurement: "$"
+#     state: >
+#       {{ state_attr('sensor.energy_email', 'body')
+#         | regex_findall_index("\*Yesterday's estimated energy cost:\* \$([0-9.]+)") }}
+#   - name: "Billing Cycle Total"
+#     unit_of_measurement: "$"
+#     state: >
+#       {{ state_attr('sensor.energy_email', 'body')
+#         | regex_findall_index("\ days:\* \$([0-9.]+)") }}
