@@ -1517,3 +1517,28 @@
     target:
       entity_id: light.sofa
   mode: single
+- id: '1678738561367'
+  alias: "CAR - \U0001F697 - Update fuel input texts"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.sidste_tankning_kvittering
+    to: Kvittering for tankning af Diesel
+  condition: []
+  action:
+  - service: input_text.set_value
+    data:
+      value: '{% set readText =  state_attr(''sensor.sidste_tankning_kvittering'',''body'')           |
+        regex_findall_index("\d{2},\d{2} l.")%}         {%set finalText = readText
+        | regex_findall_index("\d{2},\d{2}")%}         {{finalText}}'
+    target:
+      entity_id: input_text.sidste_tankning_liter
+  - service: input_text.set_value
+    data:
+      value: '{% set readText =  state_attr(''sensor.sidste_tankning_kvittering'',''body'')  |
+        regex_findall_index("\*\d{3},\d{2} kr\.") %} {%set finalText = readText |
+        regex_findall_index("\d{3},\d{2}")%} {{finalText}}'
+    target:
+      entity_id: input_text.sidste_tankning_pris
+  mode: single

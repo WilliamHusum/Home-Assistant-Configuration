@@ -150,7 +150,14 @@ sensor:
     password: !secret gmail_password
     senders:
       - !secret gmail_sender
+      - !secret gmail_sender2
     name: Sidste tankning - kvittering
+    value_template: >-
+      {% if 'Kvittering for tankning af Diesel' in subject %}
+        New data
+      {% else %}
+        No new receipt
+      {% endif %}
 
 automation: !include automations.yaml
 script: !include scripts.yaml
