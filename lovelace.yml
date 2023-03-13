@@ -1,0 +1,1782 @@
+resources:
+  - url: /local/mini-graph-card-bundle.js?v=0.9.4
+    type: module
+  - url: /local/mini-media-player-bundle.js?v=1.11.0
+    type: module
+  - url: /local/xiaomi_vacuum_map_card/xiaomi-vacuum-map-card.js
+    type: module
+title: ''
+views:
+  - theme: Backend-selected
+    title: Home
+    path: home
+    icon: mdi:home
+    badges: []
+    cards:
+      - type: custom:mushroom-title-card
+        title: |-
+          {% if now().hour < 12 %}
+          Good morning, {{user}}!
+          {% elif now().hour < 18 %}
+          Good afternoon, {{user}}!
+          {% else %}
+          Good evening, {{user}}!
+          {% endif %}
+        subtitle: >-
+          Today is {{
+          ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][now().weekday()]
+          }} {{
+          ['January','February','March','April','May','June','July','August','September','October','November','December'][now().month-1]
+          }} {{ now().day }}, {{ now().year}}. It is
+          {{state_attr('weather.home', 'temperature')}}° with
+          {{state_attr('weather.home', 'humidity')}}% humidity.
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: entity
+            entity: sensor.dark_sky_temperature
+          - type: entity
+            entity: weather.dark_sky
+          - type: entity
+            entity: sensor.number_of_lights_on
+            icon: mdi:ceiling-light
+            tap_action:
+              action: call-service
+              service: light.toggle
+              data: {}
+              target:
+                entity_id: light.alle_lys
+      - type: horizontal-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_core_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_core_update
+              name: Update
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_operating_system_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_operating_system_update
+              name: Update
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_supervisor_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_supervisor_update
+          - type: conditional
+            conditions:
+              - entity: sensor.hacs
+                state_not: '0'
+            card:
+              type: custom:mushroom-entity-card
+              entity: sensor.hacs
+              name: HACS
+              tap_action:
+                action: navigate
+                navigation_path: /hacs
+      - type: vertical-stack
+        cards:
+          - type: custom:vertical-stack-in-card
+            horizontal: true
+            cards:
+              - type: custom:mushroom-person-card
+                entity: person.william
+                double_tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                icon_type: entity-picture
+              - type: vertical-stack
+                cards:
+                  - type: custom:mushroom-chips-card
+                    chips:
+                      - type: entity
+                        entity: sensor.williams_s23_ultra_battery_level
+                        icon_color: green
+                      - type: entity
+                        entity: sensor.williams_s23_ultra_battery_state
+                        use_entity_picture: false
+                        icon: mdi:power-plug
+                    alignment: end
+                  - type: custom:mushroom-chips-card
+                    chips:
+                      - type: entity
+                        entity: sensor.williams_s23_ultra_active_notification_count
+                    alignment: end
+          - type: custom:vertical-stack-in-card
+            horizontal: true
+            cards:
+              - type: custom:mushroom-person-card
+                entity: person.gretha
+                double_tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                icon_type: entity-picture
+              - type: vertical-stack
+                cards:
+                  - type: custom:mushroom-chips-card
+                    chips:
+                      - type: entity
+                        entity: sensor.grethas_iphone7_battery_level
+                        icon_color: green
+                      - type: entity
+                        entity: sensor.grethas_iphone7_battery_state
+                        use_entity_picture: false
+                        icon: mdi:power-plug
+                    alignment: end
+                  - type: custom:mushroom-chips-card
+                    chips:
+                      - type: entity
+                        entity: sensor.iphone
+                    alignment: end
+      - type: vertical-stack
+        cards:
+          - type: custom:room-card
+            title: Stue
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/living-room
+            templates:
+              - name: style_template
+                template:
+                  show_state: false
+                  show_name: true
+                  show_icon: true
+                  styles:
+                    margin-right: 25px
+            info_entities:
+              - entity: binary_sensor.living_room_fp1_occupancy
+                show_icon: true
+                icon:
+                  conditions:
+                    - icon: mdi:motion-sensor
+                      styles:
+                        color: '#f69024'
+                      condition: equals
+                      value: 'on'
+                    - icon: mdi:motion-sensor-off
+                      condition: equals
+                      value: 'off'
+              - entity: sensor.living_room_temperature
+                show_icon: true
+              - entity: sensor.living_room_temperature
+                show_icon: false
+              - entity: sensor.living_room_humidity
+                show_icon: true
+              - entity: sensor.living_room_humidity
+                show_icon: false
+            rows:
+              - entities:
+                  - entity: light.living_room
+                    name: Stue
+                    tap_action:
+                      action: toggle
+                      haptic: success
+                      target:
+                        entity_id: light.living_room
+                    template: style_template
+                    icon:
+                      conditions:
+                        - icon: mdi:lightbulb-multiple
+                          condition: equals
+                          value: 'on'
+                        - icon: mdi:lightbulb-multiple-off
+                          condition: equals
+                          value: 'off'
+                  - entity: scene.living_room_normal_light
+                    name: 100%
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.living_room_normal_light
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: above
+                          entity: light.living_room
+                          attribute: brightness
+                          value: 250
+                          styles:
+                            color: '#f2ad63'
+                  - entity: scene.movie_mode
+                    name: Movie
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.movie_mode
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: below
+                          entity: light.living_room
+                          attribute: brightness
+                          value: 55
+                          styles:
+                            color: '#f2ad63'
+          - type: custom:room-card
+            title: Soveværelse
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/bedroom
+            templates:
+              - name: style_template
+                template:
+                  show_state: false
+                  show_name: true
+                  show_icon: true
+                  styles:
+                    margin-right: 25px
+            info_entities:
+              - entity: sensor.bedroom_temperature
+                show_icon: true
+              - entity: sensor.bedroom_temperature
+                show_icon: false
+              - entity: sensor.bedroom_co2
+                show_icon: true
+              - entity: sensor.bedroom_co2
+                show_icon: false
+            rows:
+              - entities:
+                  - entity: light.sovevaerelse
+                    name: Soveværelse
+                    tap_action:
+                      action: toggle
+                      haptic: success
+                      target:
+                        entity_id: light.sovevaerelse
+                    template: style_template
+                    icon:
+                      conditions:
+                        - icon: mdi:lightbulb-multiple
+                          condition: equals
+                          value: 'on'
+                        - icon: mdi:lightbulb-multiple-off
+                          condition: equals
+                          value: 'off'
+                  - entity: scene.bedroom_normal
+                    name: 100%
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.bedroom_normal
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: above
+                          entity: light.sovevaerelse
+                          attribute: brightness
+                          value: 250
+                          styles:
+                            color: '#f2ad63'
+                  - entity: scene.bedroom_night_time
+                    name: Night Time
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.bedroom_night_time
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: below
+                          entity: light.sovevaerelse
+                          attribute: brightness
+                          value: 110
+                          styles:
+                            color: '#f2ad63'
+          - type: custom:room-card
+            title: Badeværelse
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/bathroom
+            templates:
+              - name: style_template
+                template:
+                  show_state: false
+                  show_name: true
+                  show_icon: true
+                  styles:
+                    margin-right: 25px
+            info_entities:
+              - entity: binary_sensor.bathroom_motion
+                show_icon: true
+                icon:
+                  conditions:
+                    - icon: mdi:motion-sensor
+                      styles:
+                        color: '#f69024'
+                      condition: equals
+                      value: 'on'
+                    - icon: mdi:motion-sensor-off
+                      condition: equals
+                      value: 'off'
+              - entity: sensor.bathroom_temperature
+                show_icon: true
+              - entity: sensor.bathroom_temperature
+                show_icon: false
+              - entity: sensor.bathroom_humidity
+                show_icon: true
+              - entity: sensor.bathroom_humidity
+                show_icon: false
+            rows:
+              - entities:
+                  - entity: light.badevarelse
+                    name: Badeværelse
+                    tap_action:
+                      action: toggle
+                      haptic: success
+                      target:
+                        entity_id: light.badevarelse
+                    template: style_template
+                    icon:
+                      conditions:
+                        - icon: mdi:lightbulb-multiple
+                          condition: equals
+                          value: 'on'
+                        - icon: mdi:lightbulb-multiple-off
+                          condition: equals
+                          value: 'off'
+                  - entity: scene.bathroom_normal
+                    name: 100%
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.bathroom_normal
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: above
+                          entity: light.badevarelse
+                          attribute: brightness
+                          value: 250
+                          styles:
+                            color: '#f2ad63'
+          - type: custom:room-card
+            title: Køkken
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/kitchen
+            templates:
+              - name: style_template
+                template:
+                  show_state: false
+                  show_name: true
+                  show_icon: true
+                  styles:
+                    margin-right: 25px
+            info_entities:
+              - entity: binary_sensor.kitchen_motion
+                show_icon: true
+                icon:
+                  conditions:
+                    - icon: mdi:motion-sensor
+                      styles:
+                        color: '#f69024'
+                      condition: equals
+                      value: 'on'
+                    - icon: mdi:motion-sensor-off
+                      condition: equals
+                      value: 'off'
+              - entity: sensor.kitchen_motion_temperature
+                show_icon: true
+              - entity: sensor.kitchen_motion_temperature
+                show_icon: false
+              - entity: light.kitchen_table
+                show_icon: true
+                icon:
+                  conditions:
+                    - icon: mdi:track-light
+                      styles:
+                        color: '#f69024'
+                      condition: equals
+                      value: 'on'
+                    - icon: mdi:track-light
+                      condition: equals
+                      value: 'off'
+            rows:
+              - entities:
+                  - entity: light.kitchen_light
+                    name: Køkken
+                    tap_action:
+                      action: toggle
+                      haptic: success
+                      target:
+                        entity_id: light.kitchen_light
+                    template: style_template
+                    icon:
+                      conditions:
+                        - icon: mdi:lightbulb-multiple
+                          condition: equals
+                          value: 'on'
+                        - icon: mdi:lightbulb-multiple-off
+                          condition: equals
+                          value: 'off'
+                  - entity: scene.kitchen_normal
+                    name: 100%
+                    tap_action:
+                      action: call-service
+                      haptic: success
+                      service: scene.turn_on
+                      target:
+                        entity_id: scene.kitchen_normal
+                    template: style_template
+                    icon:
+                      conditions:
+                        - condition: above
+                          entity: light.kitchen_light
+                          attribute: brightness
+                          value: 250
+                          styles:
+                            color: '#f2ad63'
+          - type: custom:mushroom-light-card
+            entity: light.gang
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: input_select.media_players
+              - entity: input_select.media_to_play
+              - entity: input_button.play_playlist
+          - type: conditional
+            conditions:
+              - entity: sensor.chosen_media_player
+                state: media_player.mass_kokken
+            card:
+              type: custom:mushroom-media-player-card
+              entity: media_player.mass_kokken
+              use_media_info: true
+              media_controls:
+                - previous
+                - play_pause_stop
+                - on_off
+                - next
+              volume_controls:
+                - volume_buttons
+                - volume_set
+          - type: conditional
+            conditions:
+              - entity: sensor.chosen_media_player
+                state: media_player.mass_lejlighed
+            card:
+              type: custom:mushroom-media-player-card
+              entity: media_player.mass_lejlighed
+              use_media_info: true
+              media_controls:
+                - previous
+                - play_pause_stop
+                - on_off
+                - next
+              volume_controls:
+                - volume_buttons
+                - volume_set
+          - type: conditional
+            conditions:
+              - entity: sensor.chosen_media_player
+                state: media_player.mass_anlaeg
+            card:
+              type: custom:mushroom-media-player-card
+              entity: media_player.mass_anlaeg
+              use_media_info: true
+              media_controls:
+                - previous
+                - play_pause_stop
+                - on_off
+                - next
+              volume_controls:
+                - volume_buttons
+                - volume_set
+          - type: conditional
+            conditions:
+              - entity: sensor.chosen_media_player
+                state: media_player.mass_badevaerelse_speaker
+            card:
+              type: custom:mushroom-media-player-card
+              use_media_info: true
+              media_controls:
+                - previous
+                - play_pause_stop
+                - on_off
+                - next
+              volume_controls:
+                - volume_buttons
+                - volume_set
+              entity: media_player.mass_badevaerelse_speaker
+          - type: conditional
+            conditions:
+              - entity: sensor.chosen_media_player
+                state: media_player.mass_sovevarelse
+            card:
+              type: custom:mushroom-media-player-card
+              use_media_info: true
+              media_controls:
+                - previous
+                - play_pause_stop
+                - on_off
+                - next
+              volume_controls:
+                - volume_buttons
+                - volume_set
+              entity: media_player.mass_sovevarelse
+      - type: custom:mushroom-vacuum-card
+        entity: vacuum.roborock_s5_max
+        commands: []
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/vacuum
+        fill_container: false
+        icon_animation: true
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Temperatur
+          show_states: false
+          colorize_states: true
+        series:
+          - entity: sensor.bedroom_temperature
+            show:
+              legend_value: false
+            name: Soveværelse
+          - entity: sensor.bathroom_temperature
+            name: Badeværelse
+            show:
+              legend_value: false
+          - entity: sensor.kitchen_temperature
+            name: Køkken
+            show:
+              legend_value: false
+          - entity: sensor.living_room_temperature
+            name: Stue
+            show:
+              legend_value: false
+      - type: tile
+        entity: sensor.time
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/living-room
+        icon_tap_action:
+          action: navigate
+          navigation_path: /lovelace/living-room
+  - theme: Backend-selected
+    title: test
+    path: test
+    visible:
+      - user: 0f7c8467450c421aab3189c39309dac5
+      - user: 459f532c42a94dc0a60adb2dca61337c
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: light.badevarelse
+          - entity: timer.bathroom_countdown
+          - entity: binary_sensor.bathroom_motion
+      - type: entities
+        entities:
+          - entity: input_boolean.kattebakke_tomt
+          - entity: input_boolean.leftworktoggle
+          - entity: >-
+              automation.litterbox_create_actionable_notification_when_arriving_home
+      - type: entities
+        entities:
+          - entity: input_boolean.showertoggle
+          - entity: automation.03_kontakt_skru_op
+          - entity: light.badevarelse
+          - entity: media_player.badevaerelse_speaker
+          - entity: automation.03_kontakt_skru_ned
+      - type: entities
+        entities:
+          - entity: sensor.bathroom_humidity
+            name: Humidity
+          - entity: sensor.bathroom_pressure
+            name: Pressure
+          - entity: sensor.bathroom_temperature
+            name: Temperature
+        title: Bathroom Thermometer
+      - type: entities
+        entities:
+          - input_boolean.sleepmode
+      - type: entities
+        entities:
+          - sensor.next_alarm_15_minutes_subtracted
+          - sensor.next_alarm_trigger_now
+          - sensor.sm_n986b_next_alarm
+      - type: entities
+        entities:
+          - entity: sensor.lumi_lumi_plug_maeu01_active_power
+            name: Active power
+          - entity: sensor.lumi_lumi_plug_maeu01_power_factor
+            name: Power factor
+          - entity: sensor.lumi_lumi_plug_maeu01_rms_voltage
+            name: RMS voltage
+          - entity: sensor.lumi_lumi_plug_maeu01_summation_delivered
+            name: Summation delivered
+        title: Smart plug
+      - type: entities
+        entities:
+          - entity: input_number.sovevaerelse_termostat_temperatur
+          - entity: climate.sovevarelse_thermostat
+      - type: entities
+        entities:
+          - binary_sensor.skuffe
+      - type: entities
+        entities:
+          - input_datetime.termin
+      - type: entities
+        entities:
+          - input_boolean.nothometoggle
+  - theme: Backend-selected
+    icon: mdi:bed-double
+    subview: true
+    path: bedroom
+    title: Bedroom
+    badges: []
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.bedroom
+            use_light_color: false
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: false
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+          - type: custom:mushroom-light-card
+            entity: light.g_sengelampe
+            show_brightness_control: true
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+          - type: custom:mushroom-light-card
+            entity: light.w_sengelampe
+            show_brightness_control: true
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-climate-card
+            entity: climate.sovevarelse_termostat_thermostat_2
+            show_temperature_control: true
+          - type: custom:mini-graph-card
+            height: 90
+            name: ' '
+            entities:
+              - sensor.bedroom_temperature
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.bedroom_co2
+            name: CO2
+        show:
+          labels: true
+        color_thresholds:
+          - value: 600
+            color: '#2963cf'
+          - value: 900
+            color: '#e6d227'
+          - value: 1400
+            color: '#a8323e'
+      - type: custom:mushroom-media-player-card
+        entity: media_player.sovevarelse
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - entity: climate.sovevarelse_thermostat
+          - type: thermostat
+            entity: climate.sovevarelse_thermostat
+      - type: entities
+        entities:
+          - sensor.bedroom_temperature
+      - type: entities
+        entities:
+          - binary_sensor.skuffe
+  - theme: Backend-selected
+    path: living-room
+    title: Living Room
+    subview: true
+    icon: mdi:sofa
+    badges: []
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.dining_table
+            use_light_color: false
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: false
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+          - type: custom:mushroom-light-card
+            entity: light.verner_panton
+            show_brightness_control: true
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+          - type: custom:mushroom-light-card
+            entity: light.sofa
+            show_brightness_control: true
+            fill_container: false
+            layout: horizontal
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/vacuum
+        hold_action:
+          action: navigate
+          navigation_path: /lovelace/vacuum
+        name: Vacuum
+        icon: mdi:robot-vacuum
+        icon_height: 40px
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-climate-card
+            entity: climate.stue
+            show_temperature_control: true
+          - type: custom:mini-graph-card
+            height: 90
+            name: ' '
+            entities:
+              - sensor.living_room_temperature
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-media-player-card
+            entity: media_player.tv
+            volume_controls:
+              - volume_set
+              - volume_buttons
+            media_controls:
+              - play_pause_stop
+              - on_off
+            collapsible_controls: true
+            show_volume_level: true
+          - type: custom:mushroom-media-player-card
+            entity: media_player.mass_anlaeg
+            media_controls:
+              - play_pause_stop
+              - on_off
+            volume_controls:
+              - volume_set
+              - volume_buttons
+            show_volume_level: true
+            collapsible_controls: true
+      - type: media-control
+        entity: media_player.mass_anlaeg
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - entity: climate.living_room_thermostat
+          - type: thermostat
+            entity: climate.stue_termostat_thermostat
+      - type: thermostat
+        entity: climate.stue_thermo
+      - type: entities
+        entities:
+          - sensor.lumi_lumi_airmonitor_acn01_humidity
+          - sensor.lumi_lumi_airmonitor_acn01_temperature
+          - sensor.lumi_lumi_airmonitor_acn01_voc_level
+  - theme: Backend-selected
+    path: kitchen
+    title: Kitchen
+    subview: true
+    icon: mdi:fridge
+    badges: []
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.kitchen_light
+            use_light_color: false
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: false
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+          - type: custom:mushroom-light-card
+            show_brightness_control: true
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+            entity: light.kitchen_table
+            name: Køkkenbord
+            icon: mdi:light-recessed
+      - type: custom:mushroom-media-player-card
+        entity: media_player.mass_kokken
+  - theme: Backend-selected
+    path: bathroom
+    title: Bathroom
+    subview: true
+    icon: mdi:toilet
+    badges: []
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.badevarelse
+            use_light_color: false
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: false
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: more-info
+            layout: horizontal
+      - type: custom:mushroom-media-player-card
+        entity: media_player.badevaerelse_speaker
+        media_controls:
+          - play_pause_stop
+          - on_off
+        collapsible_controls: true
+      - type: custom:mushroom-media-player-card
+        entity: media_player.mass_badevaerelse_speaker
+        media_controls:
+          - on_off
+          - play_pause_stop
+        volume_controls:
+          - volume_set
+          - volume_buttons
+        collapsible_controls: true
+        use_media_info: true
+        fill_container: false
+        icon_type: icon
+        icon: mdi:air-filter
+  - theme: Backend-selected
+    title: Vacuum
+    path: vacuum
+    icon: mdi:vacuum
+    subview: true
+    badges: []
+    cards:
+      - type: custom:mushroom-vacuum-card
+        entity: vacuum.roborock_s5_max
+        icon_animation: true
+        commands:
+          - on_off
+          - start_pause
+          - return_home
+      - type: custom:xiaomi-vacuum-map-card
+        map_source:
+          camera: camera.roborock_s5_max_map
+        calibration_source:
+          camera: true
+        entity: vacuum.roborock_s5_max
+        vacuum_platform: default
+        map_modes:
+          - template: vacuum_clean_zone
+          - template: vacuum_goto
+          - template: vacuum_clean_segment
+            predefined_selections:
+              - id: '16'
+                icon:
+                  name: mdi:sofa
+                  x: 24375
+                  'y': 26450
+                label:
+                  text: Stue
+                  x: 24375
+                  'y': 26450
+                  offset_y: 35
+                outline:
+                  - - 22500
+                    - 24500
+                  - - 26250
+                    - 24500
+                  - - 26250
+                    - 28400
+                  - - 22500
+                    - 28400
+              - id: '17'
+                icon:
+                  name: mdi:close-octagon
+                  x: 21125
+                  'y': 29025
+                label:
+                  text: Skip
+                  x: 21125
+                  'y': 29025
+                  offset_y: 35
+                outline:
+                  - - 21050
+                    - 28700
+                  - - 21200
+                    - 28700
+                  - - 21200
+                    - 29350
+                  - - 21050
+                    - 29350
+              - id: '18'
+                icon:
+                  name: mdi:fridge
+                  x: 19625
+                  'y': 29475
+                label:
+                  text: Køkken
+                  x: 19625
+                  'y': 29475
+                  offset_y: 35
+                outline:
+                  - - 18250
+                    - 28600
+                  - - 21000
+                    - 28600
+                  - - 21000
+                    - 30350
+                  - - 18250
+                    - 30350
+              - id: '20'
+                icon:
+                  name: mdi:close-octagon
+                  x: 22300
+                  'y': 27850
+                label:
+                  text: Skip
+                  x: 22300
+                  'y': 27850
+                  offset_y: 35
+                outline:
+                  - - 22150
+                    - 27500
+                  - - 22450
+                    - 27500
+                  - - 22450
+                    - 28200
+                  - - 22150
+                    - 28200
+              - id: '21'
+                icon:
+                  name: mdi:shoe-cleat
+                  x: 21650
+                  'y': 28275
+                label:
+                  text: Gang
+                  x: 21650
+                  'y': 28275
+                  offset_y: 35
+                outline:
+                  - - 21000
+                    - 26800
+                  - - 22300
+                    - 26800
+                  - - 22300
+                    - 29750
+                  - - 21000
+                    - 29750
+              - id: '22'
+                icon:
+                  name: mdi:close-octagon
+                  x: 20900
+                  'y': 27225
+                label:
+                  text: Skip
+                  x: 20900
+                  'y': 27225
+                  offset_y: 35
+                outline:
+                  - - 20800
+                    - 26900
+                  - - 21000
+                    - 26900
+                  - - 21000
+                    - 27550
+                  - - 20800
+                    - 27550
+              - id: '23'
+                icon:
+                  name: mdi:bed
+                  x: 19575
+                  'y': 26175
+                label:
+                  text: Soveværelse
+                  x: 19575
+                  'y': 26175
+                  offset_y: 35
+                outline:
+                  - - 18250
+                    - 24500
+                  - - 20900
+                    - 24500
+                  - - 20900
+                    - 27850
+                  - - 18250
+                    - 27850
+        map_locked: false
+  - theme: Backend-selected
+    title: El
+    path: el
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - card:
+              entity: sensor.eloverblik_energy_total
+              max: 20
+              min: 0
+              name: >-
+                ${'Strømforbrug d. ' +
+                states['sensor.eloverblik_energy_total'].attributes.metering_date
+                }
+              severity:
+                green: 0
+                red: ${states['sensor.eloverblik_monthly_statistics'].state * 1.25}
+                yellow: ${states['sensor.eloverblik_monthly_statistics'].state * 1.10}
+              type: gauge
+            entities:
+              - sensor.eloverblik_energy_total
+              - sensor.eloverblik_monthly_statistics
+            type: custom:config-template-card
+          - type: entity
+            entity: sensor.eloverblik_monthly_statistics
+            name: Daglig gennemsnit
+      - type: vertical-stack
+        cards:
+          - type: custom:apexcharts-card
+            experimental:
+              color_threshold: true
+            series:
+              - entity: sensor.electricity_cost
+                name: Pris
+                type: column
+                float_precision: 4
+                data_generator: |
+                  return entity.attributes.today
+                    .concat(entity.attributes.tomorrow)
+                    .filter((x) => !!x)
+                    .map(([hour, price]) => {
+                      return [new Date(hour * 1000), price];
+                      });
+                color_threshold:
+                  - value: 1
+                    color: hsl(100, 60%, 70%);
+                  - value: 2
+                    color: hsl(60, 50%, 70%);
+                  - value: 2.3
+                    color: hsl(30, 50%, 70%);
+                  - value: 2.7
+                    color: hsl(10, 70%, 70%);
+                  - value: 3
+                    color: hsl(0, 90%, 70%);
+                  - value: 5
+                    color: hsl(0, 90%, 60%);
+            graph_span: 2d
+            span:
+              start: day
+              offset: '-0d'
+            now:
+              show: true
+              label: Nu
+            apex_config:
+              chart:
+                type: area
+                height: 300
+              stroke:
+                show: true
+                width: 3
+              legend:
+                show: false
+              dataLabels:
+                enabled: false
+              yaxis:
+                min: 1
+                labels:
+                  formatter: |
+                    EVAL:function(value) {
+                      return `${value.toPrecision(3).toLocaleString('da-DK')} kr`;
+                    }
+              xaxis:
+                type: datetime
+                labels:
+                  datetimeFormatter:
+                    month: ddd
+                    day: ddd
+          - type: entities
+            entities:
+              - entity: sensor.electricity_cost
+          - aggregate_func: max
+            color_thresholds:
+              - color: '#17DD1B'
+                value: 0
+              - color: '#f39c12'
+                value: 0.2
+              - color: '#FF5600'
+                value: 0.4
+              - color: '#c0392b'
+                value: 1
+            entities:
+              - entity: sensor.eloverblik_energy_0_1
+                name: 00-01
+              - entity: sensor.eloverblik_energy_1_2
+                name: 01-02
+              - entity: sensor.eloverblik_energy_2_3
+                name: 02-03
+              - entity: sensor.eloverblik_energy_3_4
+                name: 03-04
+              - entity: sensor.eloverblik_energy_4_5
+                name: 04-05
+              - entity: sensor.eloverblik_energy_5_6
+                name: 05-06
+              - entity: sensor.eloverblik_energy_6_7
+                name: 06-07
+              - entity: sensor.eloverblik_energy_7_8
+                name: 07-08
+              - entity: sensor.eloverblik_energy_8_9
+                name: 08-09
+              - entity: sensor.eloverblik_energy_9_10
+                name: 09-10
+              - entity: sensor.eloverblik_energy_10_11
+                name: 10-11
+              - entity: sensor.eloverblik_energy_11_12
+                name: 11-12
+              - entity: sensor.eloverblik_energy_12_13
+                name: 12-13
+              - entity: sensor.eloverblik_energy_13_14
+                name: 13-14
+              - entity: sensor.eloverblik_energy_14_15
+                name: 14-15
+              - entity: sensor.eloverblik_energy_15_16
+                name: 15-16
+              - entity: sensor.eloverblik_energy_16_17
+                name: 16-17
+              - entity: sensor.eloverblik_energy_17_18
+                name: 17-18
+              - entity: sensor.eloverblik_energy_18_19
+                name: 18-19
+              - entity: sensor.eloverblik_energy_19_20
+                name: 19-20
+              - entity: sensor.eloverblik_energy_20_21
+                name: 20-21
+              - entity: sensor.eloverblik_energy_21_22
+                name: 21-22
+              - entity: sensor.eloverblik_energy_22_23
+                name: 22-23
+              - entity: sensor.eloverblik_energy_23_24
+                name: 23-24
+            group_by: date
+            hour24: true
+            name: Strømforbrug i går pr time
+            show:
+              fill: true
+              graph: bar
+              labels: false
+              legend: false
+            type: custom:mini-graph-card
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: sensor.bedste_3_timer_i_dag
+                state_not: unavailable
+            card:
+              type: entity
+              entity: sensor.bedste_3_timer_i_dag
+          - type: conditional
+            conditions:
+              - entity: sensor.bedste_3_timer_generelt
+                state_not: unavailable
+            card:
+              type: entity
+              entity: sensor.bedste_3_timer_generelt
+      - type: custom:apexcharts-card
+        graph_span: 30d
+        header:
+          show: true
+          title: Sidste 30 dages elforbrug
+        span:
+          end: day
+          offset: '-1d'
+        series:
+          - entity: sensor.eloverblik_energy_statistic
+            name: Forbrug
+            type: column
+            statistics:
+              type: sum
+              period: hour
+            group_by:
+              func: diff
+              start_with_last: true
+              duration: 1d
+          - entity: sensor.eloverblik_monthly_statistics
+            name: Gennemsnit
+            type: line
+            group_by:
+              func: last
+              duration: 30d
+  - theme: Backend-selected
+    title: Mobile
+    path: mobile
+    icon: mdi:account
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_core_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_core_update
+              name: Update
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_operating_system_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_operating_system_update
+              name: Update
+          - type: conditional
+            conditions:
+              - entity: update.home_assistant_supervisor_update
+                state: 'on'
+            card:
+              type: custom:mushroom-update-card
+              entity: update.home_assistant_supervisor_update
+          - type: conditional
+            conditions:
+              - entity: sensor.hacs
+                state_not: '0'
+            card:
+              type: custom:mushroom-entity-card
+              entity: sensor.hacs
+              name: HACS
+              tap_action:
+                action: navigate
+                navigation_path: /hacs
+      - type: horizontal-stack
+        cards:
+          - type: custom:swipe-card
+            cards:
+              - type: custom:mushroom-person-card
+                entity: person.william
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace/william
+                hold_action:
+                  action: none
+                icon_type: entity-picture
+              - type: custom:mushroom-chips-card
+                chips:
+                  - type: entity
+                    entity: person.william
+                  - type: entity
+                    entity: sensor.williams_s23_ultra_battery_level
+                  - type: entity
+                    entity: sensor.williams_s23_ultra_battery_state
+          - type: custom:swipe-card
+            cards:
+              - type: custom:mushroom-person-card
+                entity: person.gretha
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace/gretha
+                hold_action:
+                  action: none
+                icon_type: entity-picture
+              - type: custom:mushroom-chips-card
+                chips:
+                  - type: entity
+                    entity: person.william
+                  - type: entity
+                    entity: sensor.grethas_iphone12_battery_level
+                  - type: entity
+                    entity: sensor.grethas_iphone12_battery_state
+      - type: custom:swipe-card
+        cards:
+          - type: horizontal-stack
+            cards:
+              - hours_to_show: 24
+                graph: line
+                type: sensor
+                detail: 1
+                entity: sensor.living_room_temperature
+              - hours_to_show: 24
+                graph: line
+                type: sensor
+                entity: sensor.bathroom_temperature
+                detail: 1
+              - hours_to_show: 24
+                graph: line
+                type: sensor
+                entity: sensor.living_room_temperature
+                detail: 1
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:button-card
+            entity: light.living_room
+            show_icon: false
+            name: Living Room
+            styles:
+              card: null
+              custom_fields:
+                icon_cells:
+                  - justify-self: start
+                  - margin-top: 5%
+                  - margin-left: 15px
+                devices:
+                  - justify-self: end
+                  - margin-right: 8px
+                  - margin-top: '-17px'
+                temp:
+                  - filter: opacity(80%)
+                  - justify-self: start
+                  - margin-left: 10px
+                  - margin-top: '-2px'
+                  - padding-bottom: 10%
+                graph:
+                  - padding-top: 0%
+                  - width: 100%
+                  - height: 0%
+                  - margin-bottom: '-1%'
+              icon:
+                - width: 25px
+                - color: auto
+              name:
+                - font-size: 90%
+                - font-weight: bold
+                - justify-self: start
+                - margin-top: 6px
+                - margin-left: 12px
+              grid:
+                - grid-template-areas: '"icon_cells devices" "n n" "temp temp" "graph graph"'
+                - grid-template-columns: 1fr min-content
+                - grid-template-rows: 1fr min-content min-content min-content
+            custom_fields:
+              icon_cells: |
+                [[[
+                  return `<ha-icon
+                    icon="mdi:sofa"
+                    style="width: 25px; height: 25px; color: auto;">
+                   </ha-icon> 
+                   `
+                ]]]
+              devices: |
+                [[[
+                    var codeBlk = "";
+                    if (states['binary_sensor.living_room_fp1_occupancy'].state == 'on') 
+                      codeBlk = `<ha-icon
+                    icon="mdi:motion-sensor"
+                    style="width: 13px; height: 13px; color: #DC0000;">
+                   </ha-icon>`;
+                    if (states['light.living_room'].state == 'on') 
+                      codeBlk = codeBlk + " " + `<ha-icon
+                    icon="mdi:lightbulb"
+                    style="width: 13px; height: 13px; color: #FED049;">
+                    </ha-icon>
+                   `;
+                    return codeBlk;
+                  
+                ]]]
+              temp: |
+                [[[
+                  return `<ha-icon
+                    icon="mdi:thermometer"
+                    style="width: 15px; height: 15px; color: #FFFFF;">
+                    </ha-icon><span style="font-size:60%; font-weight: normal;"> 
+                    ${states['sensor.living_room_temperature'].state}°C</span>
+                    <ha-icon
+                    icon="mdi:water-percent"
+                    style="width: 15px; height: 15px; color: #FFFF;">
+                    </ha-icon><span style="font-size:60%; font-weight: normal; text-align: center;">
+                    ${states['sensor.living_room_humidity'].state}%</span>`
+
+                ]]]
+              graph:
+                card:
+                  type: custom:mini-graph-card
+                  entities:
+                    - entity: sensor.living_room_temperature
+                      color: '#DC0000'
+                  line_width: 0
+                  show:
+                    icon: false
+                    name: false
+                    legend: false
+                    state: false
+                  card_mod:
+                    style: |
+                      ha-card {
+                      background: none;
+                      border-style: none;
+                      margin-top: -40px;
+                      }
+          - type: custom:button-card
+            entity: null
+            show_icon: false
+            name: Kitchen
+            styles:
+              card: null
+              custom_fields:
+                icon_cells:
+                  - justify-self: start
+                  - margin-top: 5%
+                  - margin-left: 15px
+                devices:
+                  - justify-self: end
+                  - margin-right: 8px
+                  - margin-top: '-17px'
+                temp:
+                  - filter: opacity(80%)
+                  - justify-self: start
+                  - margin-left: 10px
+                  - margin-top: '-2px'
+                  - padding-bottom: 10%
+                graph:
+                  - padding-top: 0%
+                  - width: 100%
+                  - height: 0%
+                  - margin-bottom: '-1%'
+              icon:
+                - width: 25px
+                - color: auto
+              name:
+                - font-size: 90%
+                - font-weight: bold
+                - justify-self: start
+                - margin-top: 6px
+                - margin-left: 12px
+              grid:
+                - grid-template-areas: '"icon_cells devices" "n n" "temp temp" "graph graph"'
+                - grid-template-columns: 1fr min-content
+                - grid-template-rows: 1fr min-content min-content min-content
+            custom_fields:
+              icon_cells: |
+                [[[
+                  return `<ha-icon
+                    icon="mdi:knife"
+                    style="width: 25px; height: 25px; color: auto;">
+                   </ha-icon> 
+                   `
+                ]]]
+              devices: |
+                [[[
+                    var codeBlk = "";
+                    if (states['binary_sensor.kitchen_motion'].state == 'on') 
+                      codeBlk = `<ha-icon
+                    icon="mdi:motion-sensor"
+                    style="width: 13px; height: 13px; color: #DC0000;">
+                   </ha-icon>`;
+                    if (states['light.kitchen_light'].state == 'tmp') 
+                      codeBlk = codeBlk + " " + `<ha-icon
+                    icon="mdi:lightbulb"
+                    style="width: 13px; height: 13px; color: #FED049;">
+                    </ha-icon>
+                   `;
+                    return codeBlk;
+                  
+                ]]]
+              temp: |
+                [[[
+                  return `<ha-icon
+                    icon="mdi:thermometer"
+                    style="width: 11px; height: 11px; color: #DC0000;">
+                    </ha-icon><span style="font-size:60%; font-weight: normal;"> 
+                    ${states['sensor.bedroom_temperature'].state}°C</span>
+                    <ha-icon
+                    icon="mdi:water-percent"
+                    style="width: 11px; height: 11px; color: #1F8A70;">
+                    </ha-icon><span style="font-size:60%; font-weight: normal; text-align: center;">
+                    ${states['sensor.bedroom_humidity'].state}%</span>
+                    <ha-icon
+                    icon="mdi:air-filter"
+                    style="width: 11px; height: 11px; color: #FF5F9E;">
+                    </ha-icon><span style="font-size:60%; font-weight: normal; text-align: center;">
+                    ${states['sensor.bedroom_co2'].state}PPM</span>`
+
+                ]]]
+              graph:
+                card:
+                  type: custom:mini-graph-card
+                  entities:
+                    - entity: sensor.bedroom_temperature
+                      color: '#DC0000'
+                  line_width: 0
+                  show:
+                    icon: false
+                    name: false
+                    legend: false
+                    state: false
+                  card_mod:
+                    style: |
+                      ha-card {
+                      background: none;
+                      border-style: none;
+                      margin-top: -40px;
+                      }
+      - type: custom:button-card
+        entity: light.living_room
+        show_icon: false
+        name: Stue
+        styles:
+          card: null
+          custom_fields:
+            icon_cells:
+              - justify-self: start
+              - margin-top: 0%
+              - margin-left: 10px
+            devices:
+              - justify-self: end
+              - margin-right: 8px
+            temp:
+              - filter: opacity(80%)
+              - justify-self: start
+              - margin-left: 10px
+              - margin-top: '-2px'
+              - padding-bottom: 0%
+            graph:
+              - padding-top: 0%
+              - width: 100%
+              - height: 0%
+              - margin-bottom: '%'
+          icon:
+            - width: 25px
+            - color: auto
+          name:
+            - font-size: 90%
+            - font-weight: bold
+            - justify-self: start
+            - margin-top: 12px
+            - margin-left: 10px
+          grid:
+            - grid-template-areas: '"icon_cells devices" "n n" "temp temp" "graph graph"'
+            - grid-template-columns: 1fr min-content
+            - grid-template-rows: 1fr min-content min-content min-content
+        custom_fields:
+          icon_cells: |
+            [[[
+              return `<ha-icon
+                icon="mdi:sofa"
+                style="width: 30px; height: 30px; color: auto;">
+               </ha-icon> 
+               <br/>
+               `
+            ]]]
+          devices: |
+            [[[
+                var codeBlk = "";
+                if (states['binary_sensor.living_room_fp1_occupancy'].state == 'on') 
+                  codeBlk = `<ha-icon
+                icon="mdi:motion-sensor"
+                style="width: 18px; height: 18px; color: #FFFFFF;">
+               </ha-icon>`;
+                if (states['light.living_room'].state == 'on') 
+                  codeBlk = codeBlk + " " + `<ha-icon
+                icon="mdi:lightbulb"
+                style="width: 18px; height: 18px; color: #FFFFF;">
+                </ha-icon>
+               `;
+                return codeBlk;
+              
+            ]]]
+          temp: |
+            [[[
+              return `
+              <br/><ha-icon
+                icon="mdi:thermometer"
+                style="width: 30px; height: 30px; color: #FFFFF;">
+                </ha-icon><span style="font-size:80%; font-weight: normal;"> 
+                ${states['sensor.living_room_temperature'].state}°C</span>
+                <ha-icon
+                icon="mdi:water-percent"
+                style="width: 30px; height: 30px; color: #FFFF;">
+                </ha-icon><span style="font-size:80%; font-weight: normal; text-align: center;">
+                ${states['sensor.living_room_humidity'].state}%</span>`
+
+            ]]]
+  - theme: Backend-selected
+    title: William
+    path: william
+    icon: mdi:face-man-outline
+    subview: true
+    badges: []
+    cards:
+      - type: map
+        entities:
+          - entity: person.william
+        hours_to_show: 12
+        dark_mode: false
+        default_zoom: 12
+      - type: custom:mushroom-person-card
+        entity: person.william
+      - type: gauge
+        entity: sensor.w_home_time
+        max: 24
+        needle: false
+        min: 0
+  - theme: Backend-selected
+    title: Gretha
+    path: gretha
+    icon: mdi:face-woman
+    subview: true
+    badges: []
+    cards:
+      - type: map
+        entities:
+          - entity: person.gretha
+        hours_to_show: 12
+        default_zoom: 12
+  - theme: Backend-selected
+    title: Server
+    path: server
+    icon: mdi:server-network
+    subview: true
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: sensor.current_version
+              - entity: sensor.uptime
+                name: Last restart
+              - entity: sensor.processor_temperature
+              - entity: sensor.disk_use_percent_config
+              - entity: sensor.memory_use_percent
+              - entity: sensor.processor_use
+            title: Home Assistant
+      - type: entities
+        entities:
+          - update.william_nas_dsm_update
+          - button.william_nas_reboot
+          - button.william_nas_shutdown
+          - binary_sensor.william_nas_drive_1_below_min_remaining_life
+          - binary_sensor.william_nas_drive_1_exceeded_max_bad_sectors
+          - sensor.william_nas_drive_1_status
+          - sensor.william_nas_drive_1_temperature
+          - binary_sensor.william_nas_drive_2_below_min_remaining_life
+          - binary_sensor.william_nas_drive_2_exceeded_max_bad_sectors
+          - sensor.william_nas_drive_2_status
+          - sensor.william_nas_drive_2_temperature
+          - binary_sensor.william_nas_drive_3_below_min_remaining_life
+          - binary_sensor.william_nas_drive_3_exceeded_max_bad_sectors
+          - sensor.william_nas_drive_3_status
+          - sensor.william_nas_drive_3_temperature
+          - binary_sensor.william_nas_drive_4_below_min_remaining_life
+          - binary_sensor.william_nas_drive_4_exceeded_max_bad_sectors
+          - sensor.william_nas_drive_4_status
+          - sensor.william_nas_drive_4_temperature
+          - sensor.william_nas_volume_1_average_disk_temp
+          - sensor.william_nas_volume_1_status
+          - sensor.william_nas_volume_1_used_space
+          - sensor.william_nas_volume_1_volume_used
+          - sensor.william_nas_cpu_load_average_15_min
+          - sensor.william_nas_cpu_load_average_5_min
+          - sensor.william_nas_cpu_utilization_total
+          - sensor.william_nas_cpu_utilization_user
+          - sensor.william_nas_download_throughput
+          - sensor.william_nas_memory_available_real
+          - sensor.william_nas_memory_available_swap
+          - sensor.william_nas_memory_total_real
+          - sensor.william_nas_memory_total_swap
+          - sensor.william_nas_memory_usage_real
+          - binary_sensor.william_nas_security_status
+          - sensor.william_nas_temperature
+          - sensor.william_nas_upload_throughput
+  - theme: Backend-selected
+    title: Batteries
+    path: batteries
+    icon: mdi:battery-10
+    subview: true
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - sensor.bathroom_motion_battery
+          - sensor.bathroom_switch_battery_3
+          - sensor.lumi_lumi_weather_battery
+          - sensor.bed_button_battery
+          - sensor.bedroom_switch_battery_2
+          - sensor.lumi_lumi_remote_b1acn01_battery
+          - sensor.lumi_lumi_sensor_motion_aq2_battery
+          - sensor.lumi_lumi_sensor_motion_aq2_battery_2
+          - sensor.kitchen_table_motion_battery
+          - sensor.lumi_lumi_sensor_motion_aq2_battery_4
+          - sensor.living_room_switch_battery
+          - sensor.lumi_lumi_sensor_ht_battery
+          - sensor.lumi_lumi_sensor_magnet_battery
+          - sensor.sovevarelse_termostat_battery_2
+          - sensor.stue_termostat_battery
+          - sensor.lumi_lumi_vibration_aq1_battery
+          - sensor.lumi_lumi_sensor_magnet_battery_2
+        state_color: true
+  - theme: Backend-selected
+    title: Surdej
+    path: surdej
+    icon: mdi:baguette
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: input_datetime.surdejsboller_faerdige
+            secondary_info: none
+        state_color: false
+        title: Hvornår skal bollerne være færdige?
+      - type: entities
+        entities:
+          - input_datetime.surdejsboller_start
+        title: Start
+      - type: entities
+        entities:
+          - input_datetime.fodr_surdej
+        title: Fodr
+  - theme: Backend-selected
+    title: Car
+    path: car
+    icon: mdi:car-connected
+    badges: []
+    cards:
+      - type: picture
+        image: https://www.hessel.dk/media/45794/titaniumside_1.png
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+      - type: entity
+        entity: input_text.sidste_tankning_pris
+        unit: kr.
+      - type: entity
+        entity: input_text.sidste_tankning_liter
+        unit: liter
