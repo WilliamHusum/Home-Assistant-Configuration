@@ -148,9 +148,9 @@ sensor:
     port: 993
     username: !secret gmail_username
     password: !secret gmail_password
-    folder: OK kvittering
     senders:
       - !secret gmail_sender
+    name: Sidste tankning - kvittering
 
 automation: !include automations.yaml
 script: !include scripts.yaml
