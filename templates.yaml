@@ -206,6 +206,7 @@
 - sensor:
     - name: "Sidste tankning liter brændstof"
       unit_of_measurement: "liter"
+      unique_id: "last_refuel_liters"
       state: >
         {% set readText =  state_attr('sensor.sidste_tankning_kvittering','body')
           | regex_findall_index("\d{2},\d{2} l.")%}
@@ -214,8 +215,9 @@
 
     - name: "Sidste tankning - samlet pris"
       unit_of_measurement: "kr."
+      unique_id: "last_refuel_price"
       state: >
         {% set readText =  state_attr('sensor.sidste_tankning_kvittering','body') 
-        | regex_findall_index("\*\d{3},\d{2} kr\.") %}
+          | regex_findall_index("\d{3},\d{2} kr\.") %}
         {%set finalText = readText | regex_findall_index("\d{3},\d{2}")%}
         {{finalText}}

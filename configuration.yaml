@@ -159,6 +159,20 @@ sensor:
         No new receipt
       {% endif %}
 
+  - platform: average
+    name: "Gennemsnitlig liter antal den seneste måned"
+    duration:
+      days: 30
+    entities:
+      - sensor.sidste_tankning_samlet_pris
+
+  - platform: average
+    name: "Gennemsnitlig pris den sidste måned"
+    duration:
+      days: 30
+    entities:
+      - sensor.sidste_tankning_liter_braendstof
+
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
