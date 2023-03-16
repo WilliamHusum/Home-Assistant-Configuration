@@ -286,14 +286,14 @@
     data:
       volume_level: 0.2
     target:
-      entity_id: media_player.badevaerelse_speaker
+      entity_id: media_player.badevaerelse
   - service: media_player.play_media
     data:
       media_content_id: https://open.spotify.com/playlist/37i9dQZF1DWWKeNBqaIy5U
       media_content_type: playlist
       enqueue: replace
     target:
-      entity_id: media_player.badevaerelse_speaker
+      entity_id: media_player.badevaerelse
   mode: single
 - id: '1631543656957'
   alias: "BATHROOM - \U0001F3B5 - Turn off music"
@@ -420,6 +420,9 @@
     - condition: zone
       entity_id: person.gretha
       zone: zone.home
+  - condition: state
+    entity_id: input_boolean.skipnextvacuumrun
+    state: 'off'
   action:
   - service: roborock.vacuum_clean_segment
     data:
@@ -1525,20 +1528,37 @@
     entity_id:
     - sensor.sidste_tankning_kvittering
     to: Kvittering for tankning af Diesel
+  - platform: state
+    entity_id:
+    - sensor.sidste_tankning_kvittering
+    to: New data
   condition: []
   action:
   - service: input_text.set_value
     data:
-      value: '{% set readText =  state_attr(''sensor.sidste_tankning_kvittering'',''body'')           |
-        regex_findall_index("\d{2},\d{2} l.")%}         {%set finalText = readText
-        | regex_findall_index("\d{2},\d{2}")%}         {{finalText}}'
+      value: "{% set readText =  state_attr('sensor.sidste_tankning_kvittering','body')\n
+        \ | regex_findall_index(\"\\d{2},\\d{2} l.\")%}\n{%set finalText = readText
+        | regex_findall_index(\"\\d{2},\\d{2}\")%} {{finalText}}"
     target:
       entity_id: input_text.sidste_tankning_liter
   - service: input_text.set_value
     data:
-      value: '{% set readText =  state_attr(''sensor.sidste_tankning_kvittering'',''body'')  |
-        regex_findall_index("\*\d{3},\d{2} kr\.") %} {%set finalText = readText |
-        regex_findall_index("\d{3},\d{2}")%} {{finalText}}'
+      value: "{% set readText =  state_attr('sensor.sidste_tankning_kvittering','body')
+        \n  | regex_findall_index(\"\\d{3},\\d{2} kr\\.\") %}\n{%set finalText = readText
+        | regex_findall_index(\"\\d{3},\\d{2}\")%} {{finalText}}"
     target:
       entity_id: input_text.sidste_tankning_pris
+  mode: single
+- id: '1678917124633'
+  alias: "MAINTENANCE - \U0001F527 - Reset VacuumSkipToggle at 11:00"
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:02:00'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.skipnextvacuumrun
   mode: single
