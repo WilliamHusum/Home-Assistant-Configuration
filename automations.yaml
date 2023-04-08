@@ -1562,3 +1562,60 @@
     target:
       entity_id: input_boolean.skipnextvacuumrun
   mode: single
+- id: '1680204960732'
+  alias: "LIVING ROOM - \U0001F4FA - Turn on movie mode from remote"
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: moviemode_on
+  condition: []
+  action:
+  - service: input_boolean.toggle
+    data: {}
+    target:
+      entity_id: input_boolean.moviemode
+  mode: single
+- id: '1680206970539'
+  alias: "LIVING ROOM - \U0001F4FA - Movie mode on"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.moviemode
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 10
+    target:
+      entity_id: light.living_room
+  - service: homeassistant.turn_off
+    data: {}
+    target:
+      entity_id:
+      - automation.living_room_turn_off_lights_if_room_is_not_occupied
+      - automation.living_room_when_motion_detected_turn_on_lights
+  mode: single
+- id: '1680207109704'
+  alias: "LIVING ROOM - \U0001F4FA - Moviemode off"
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.moviemode
+    to: 'off'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.living_room
+  - service: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id:
+      - automation.living_room_turn_off_lights_if_room_is_not_occupied
+      - automation.living_room_when_motion_detected_turn_on_lights
+  mode: single
