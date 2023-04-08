@@ -102,27 +102,6 @@ sensor:
     max_age:
       days: 30
 
-  - platform: darksky
-    api_key: !secret dark_sky_api_key
-    forecast:
-      - 0
-    hourly_forecast:
-      - 0
-      - 1
-      - 4
-    language: da
-    monitored_conditions:
-      - summary
-      - icon
-      - temperature
-      - apparent_temperature
-      - precip_probability
-    scan_interval:
-      days: 0
-      hours: 0
-      minutes: 3
-      seconds: 30
-
   - platform: systemmonitor
     resources:
       - type: disk_use_percent
