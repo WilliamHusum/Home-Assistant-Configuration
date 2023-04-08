@@ -161,15 +161,13 @@ sensor:
 
   - platform: average
     name: "Gennemsnitlig liter antal den seneste måned"
-    duration:
-      days: 30
+    unique_id: avg_amount_last_month_fuel
     entities:
       - sensor.sidste_tankning_samlet_pris
 
   - platform: average
     name: "Gennemsnitlig pris den sidste måned"
-    duration:
-      days: 30
+    unique_id: avg_price_last_month_fuel
     entities:
       - sensor.sidste_tankning_liter_braendstof
 
