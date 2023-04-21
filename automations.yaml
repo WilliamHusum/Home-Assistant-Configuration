@@ -499,8 +499,8 @@
   - device_id: d6ac81c05e4c6718622d18cf8fd48816
     domain: zha
     platform: device
-    type: remote_button_short_press
-    subtype: remote_button_short_press
+    type: remote_button_double_press
+    subtype: remote_button_double_press
   condition: []
   action:
   - service: light.turn_off
@@ -1618,4 +1618,40 @@
       entity_id:
       - automation.living_room_turn_off_lights_if_room_is_not_occupied
       - automation.living_room_when_motion_detected_turn_on_lights
+  mode: single
+- id: '1681202751357'
+  alias: AAAA webhook test
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: -lKCnPYCyx7L1z5g-ck29XXg2
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      brightness_pct: 100
+    target:
+      entity_id:
+        trigger.data:
+  - service: light.toggle
+    data_template:
+      brightness_pct: 100
+    target:
+      entity_id:
+        trigger.data:
+    enabled: false
+  - service: input_text.set_value
+    data_template:
+      value: '{{ trigger.data.text }}'
+    target:
+      entity_id: input_text.sidste_tankning_dato
+  - service: light.toggle
+    data_template:
+      brightness_pct: 100
+    target:
+      entity_id: "{% if is_state('{{ input_text.sidste_tankning_dato }}', 'stue')
+        %}\n   '{{ light.living_room }}'\n{% elif is_state('input_text.sidste_tankning_dato
+        ', 'soveværelse') %}\n   '{{light.bedroom}}'\n{% elif is_state('input_text.sidste_tankning_dato',
+        'køkken') %}\n    '{{ light.kitchen_group }}'\n{% elif is_state('input_text.sidste_tankning_dato',
+        'badeværelse') %}\n    '{{ light.badevarelse }}'\n{% endif %}"
   mode: single
