@@ -134,18 +134,6 @@ sensor:
         No new receipt
       {% endif %}
 
-  - platform: average
-    name: "Gennemsnitlig liter antal den seneste måned"
-    unique_id: avg_amount_last_month_fuel
-    entities:
-      - sensor.sidste_tankning_samlet_pris
-
-  - platform: average
-    name: "Gennemsnitlig pris den sidste måned"
-    unique_id: avg_price_last_month_fuel
-    entities:
-      - sensor.sidste_tankning_liter_braendstof
-
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
