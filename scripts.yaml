@@ -273,3 +273,21 @@ post_notify_person_home_of_new_mail:
           entity_id: input_boolean.nyposttoggle
   mode: single
   icon: mdi:email-alert
+open_left_curtain:
+  alias: Open left curtain
+  sequence:
+  - service: cover.set_cover_position
+    data:
+      position: 82
+    target:
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+  mode: single
+close_left_curtain:
+  alias: Close left curtain
+  sequence:
+  - service: cover.set_cover_position
+    data:
+      position: 100
+    target:
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+  mode: single

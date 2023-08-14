@@ -136,10 +136,11 @@
         {% set lights = [
           states.light.badevarelse,
           states.light.verner_panton,
-          states.light.rispapir,
+          states.light.dining_table,
+          states.light.sofa,
           states.light.gang,
-          states.light.kokken,
-          states.light.kokkenbord,
+          states.light.kitchen_light,
+          states.light.kitchen_table,
           states.light.sovevaerelse,
           states.light.w_sengelampe,
           states.light.g_sengelampe,
@@ -197,11 +198,10 @@
         {% endif%}
 
 - sensor:
-    - name: "DaysTillBirth"
+    - name: "Eigil alder i uger"
       icon: mdi:baby
-      unique_id: "DaysTillBirth"
       state: >
-        {{ ((state_attr('input_datetime.termin', 'timestamp') - as_timestamp(now()))  / 86400) | round(0, 'ceil')}}
+        {{ ((as_timestamp(now()) - state_attr('input_datetime.eigil_birthday', 'timestamp')) / 86400 / 7) | int }}
 
 - sensor:
     - name: "Sidste tankning liter brændstof"
@@ -221,3 +221,27 @@
           | regex_findall_index("\d{3},\d{2} kr\.") %}
         {%set finalText = readText | regex_findall_index("\d{3},\d{2}")%}
         {{finalText}}
+
+- sensor:
+    - name: Sidste tankning - kvittering
+      state:
+        "{% if 'Kvittering for tankning af Diesel' in trigger.event.data[\"subject\"\
+        ] %}\n  New data\n{% else %}\n  No new receipt\n{% endif %}"
+  trigger:
+    - event_data:
+        sender: noreply@ok.dk
+      event_type: imap_content
+      id: custom_event
+      platform: event
+
+- sensor:
+    - name: "Sidst skiftet"
+      unique_id: "last_diaper_change"
+      state: >
+        {{ relative_time(states.sensor.eigil_vindum_husum_last_change.last_changed) }}
+
+- sensor:
+    - name: "Sidst ammet"
+      unique_id: "last_feeding"
+      state: >
+        {{ relative_time(states.sensor.eigil_vindum_husum_last_feeding.last_changed) }}
