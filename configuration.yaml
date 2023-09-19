@@ -11,28 +11,11 @@ http:
 recorder:
 
 frontend:
-  themes: !include_dir_merge_named themes
+  themes: !include_dir_merge_named themes/
 
 # Text to speech
 tts:
   - platform: google_translate
-
-fuelprices_dk:
-  # Optional entries
-  companies:
-    # possible values are: circlek, f24, goon, ingo, oil, ok, q8 and shell
-    - ok
-    - shell
-    - circlek
-    - f24
-    #- goon
-    - ingo
-    - oil
-    - q8
-  fueltypes:
-    # Possible values are: oktan 95, oktan 95+, oktan 100, diesel, diesel+
-    #  - oktan 95
-    - diesel
 
 influxdb:
   host: !secret influx_db_host
@@ -42,16 +25,6 @@ influxdb:
   password: !secret influx_db_password
   max_retries: 3
   default_measurement: state
-
-# camera:
-#   - platform: xiaomi_cloud_map_extractor
-#     host: !secret xiaomi_vacuum_host
-#     token: !secret xiaomi_vacuum_token
-#     username: !secret xiaomi_cloud_username
-#     password: !secret xiaomi_cloud_password
-#     draw: ["all"]
-#     attributes:
-#       - calibration_points
 
 notify:
   - platform: html5
@@ -78,22 +51,6 @@ sensor:
       - "date"
       - "date_time"
 
-  # - platform: history_stats
-  #   name: W home time
-  #   entity_id: person.william
-  #   state: "home"
-  #   type: time
-  #   start: "{{ (now()-86400) | int | timestamp_custom('%H:%M')}}"
-  #   end: "{{ now() }}"
-
-  # - platform: history_stats
-  #   name: G home time
-  #   entity_id: person.gretha
-  #   state: "home"
-  #   type: time
-  #   start: "{{ (now()-86400) | int | timestamp_custom('%H:%M')}}"
-  #   end: "{{ now() }}"
-
   - platform: statistics
     entity_id: sensor.eloverblik_energy_total
     name: Eloverblik Monthly Statistics
@@ -118,21 +75,21 @@ sensor:
       - type: processor_temperature
       - type: last_boot
 
-  - platform: imap_email_content
-    server: imap.gmail.com
-    port: 993
-    username: !secret gmail_username
-    password: !secret gmail_password
-    senders:
-      - !secret gmail_sender
-      - !secret gmail_sender2
-    name: Sidste tankning - kvittering
-    value_template: >-
-      {% if 'Kvittering for tankning af Diesel' in subject %}
-        New data
-      {% else %}
-        No new receipt
-      {% endif %}
+  # - platform: imap_email_content
+  #   server: imap.gmail.com
+  #   port: 993
+  #   username: !secret gmail_username
+  #   password: !secret gmail_password
+  #   senders:
+  #     - !secret gmail_sender
+  #     - !secret gmail_sender2
+  #   name: Sidste tankning - kvittering
+  #   value_template: >-
+  #     {% if 'Kvittering for tankning af Diesel' in subject %}
+  #       New data
+  #     {% else %}
+  #       No new receipt
+  #     {% endif %}
 
 automation: !include automations.yaml
 script: !include scripts.yaml

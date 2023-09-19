@@ -54,27 +54,6 @@
     target:
       entity_id: light.gang
   mode: single
-- id: '1603368302037'
-  alias: "BEDROOM - \U0001F39A️ - Bed - Switch, Turn off all lights"
-  description: ''
-  trigger:
-  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: turn_on
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      entity_id: light.alle_lys
-  - service: input_boolean.turn_on
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.sleepmode
-  mode: single
 - id: '1605703328614'
   alias: "PHONE - \U0001F4F1 - Mute phone, when arriving at work"
   description: ''
@@ -295,7 +274,7 @@
   - service: media_player.play_media
     data:
       media_content_type: playlist
-      media_content_id: https://open.spotify.com/playlist/37i9dQZF1DX6kQOEoHSaYy?si=5b8b46161c294c33
+      media_content_id: https://open.spotify.com/playlist/37i9dQZF1DWV7EzJMK2FUI?si=f7b907d69ac7449e
       enqueue: replace
     target:
       entity_id: media_player.badevaerelse_mass
@@ -1274,17 +1253,17 @@
     platform: device
     type: remote_button_double_press
     subtype: turn_off
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
   condition: []
   action:
   - service: light.turn_off
     data: {}
     target:
-      entity_id:
-      - light.badevarelse
-      - light.bedroom
-      - light.gang
-      - light.kitchen_group
-      - light.living_room
+      entity_id: light.alle_lys
   - service: input_boolean.turn_on
     data: {}
     target:
@@ -1313,18 +1292,21 @@
       title: "\U0001F697\U0001F695\U0001F698\U0001F3CE️"
   mode: single
 - id: '1677096205566'
-  alias: "BABY - \U0001F476\U0001F3FB - Notify of days left until due date"
+  alias: "BABY - \U0001F476\U0001F3FB - Notify of age in weeks, every friday"
   description: ''
   trigger:
   - platform: time
     at: 06:00:00
-  condition: []
+  condition:
+  - condition: time
+    weekday:
+    - fri
   action:
   - service: notify.vindum_husum
     data:
-      message: "I dag er der {{ states.sensor.daystillbirth.state }} dage til termin!
+      message: "I dag er Eigil {{ states.sensor.eigil_alder_i_uger.state }} gammel!
         \U0001F476\U0001F3FB"
-      title: Nedtælling
+      title: Antal uger
       target: '#baby'
   mode: single
 - id: '1678346637648'
@@ -1491,24 +1473,6 @@
       - automation.living_room_turn_off_lights_if_room_is_not_occupied
       - automation.living_room_when_motion_detected_turn_on_lights
   mode: single
-- id: '1684349784152'
-  alias: "SOFA - \U0001F6CB️ - When no one is on the couch, pause tc"
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - binary_sensor.presence_sensor_fp2_sofa
-    to: 'off'
-  condition:
-  - condition: state
-    entity_id: media_player.tv
-    state: playing
-  action:
-  - service: media_player.media_pause
-    data: {}
-    target:
-      entity_id: media_player.android_tv_192_168_0_191
-  mode: single
 - id: '1685541474629'
   alias: "BEDROOM - \U0001F39A️ - Switch, double press to turn on lights dimmed"
   description: ''
@@ -1543,41 +1507,6 @@
     target:
       entity_id: sensor.baby_eigil_vindum_husum
   mode: single
-- id: '1685976684535'
-  alias: "BABY - \U0001F476 - Double click dim down, to log diaper change (wet)"
-  description: ''
-  trigger:
-  - device_id: db28128d01b811eb8b321fddc9a811b3
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: dim_down
-  condition: []
-  action:
-  - service: babybuddy.add_diaper_change
-    data:
-      type: Wet
-    target:
-      entity_id: sensor.baby_eigil_vindum_husum
-  mode: single
-- id: '1685980019027'
-  alias: "BABY - \U0001F476 -Dim down, log feeding"
-  description: ''
-  trigger:
-  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: dim_down
-  condition: []
-  action:
-  - service: babybuddy.add_feeding
-    data:
-      method: Both breasts
-      type: Breast milk
-    target:
-      device_id: 0be6e7c3950fa8322ffe6c35f95a525f
-  mode: single
 - id: '1686818578507'
   alias: "MODES - \U0001F3E0 - Control modes"
   description: ''
@@ -1587,64 +1516,79 @@
     - input_select.house_modes
   condition: []
   action:
-  - if:
-    - condition: state
-      entity_id: input_select.house_modes
-      state: PutteMode
-    then:
-    - service: homeassistant.turn_off
-      data: {}
-      target:
-        entity_id:
-        - automation.02_taend_lys_i_gangen_dag
-        - automation.living_room_when_motion_detected_turn_on_lights
-        - automation.01_taend_lys_i_kokkenet
-      enabled: true
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 10
-        milliseconds: 0
-    - service: input_select.select_first
-      data: {}
-      target:
+  - choose:
+    - conditions:
+      - condition: state
         entity_id: input_select.house_modes
-  - if:
-    - condition: state
-      entity_id: input_select.house_modes
-      state: NotHomeMode
-    then:
-    - service: homeassistant.turn_off
-      data: {}
-      target:
-        entity_id:
-        - automation.02_taend_lys_i_gangen_dag
-        - automation.01_taend_lys_i_kokkenet
-        - automation.13_taend_kokkenbord
-        - automation.living_room_when_motion_detected_turn_on_lights
-        - automation.badevaerelse_turn_on_lights
-    - service: light.turn_off
-      data: {}
-      target:
-        entity_id: light.alle_lys
-  - if:
-    - condition: state
-      entity_id: input_select.house_modes
-      state: Default
-    then:
-    - service: homeassistant.turn_on
-      data: {}
-      target:
-        entity_id:
-        - automation.02_taend_lys_i_gangen_dag
-        - automation.01_taend_lys_i_kokkenet
-        - automation.13_taend_kokkenbord
-        - automation.living_room_when_motion_detected_turn_on_lights
-        - automation.badevaerelse_turn_on_lights
-        - automation.02_taend_lys_i_gangen_dag
-        - automation.living_room_when_motion_detected_turn_on_lights
-        - automation.01_taend_lys_i_kokkenet
-    enabled: false
+        state: SleepMode
+      sequence:
+      - service: homeassistant.turn_off
+        data: {}
+        target:
+          entity_id:
+          - automation.02_taend_lys_i_gangen_dag
+          - automation.living_room_when_motion_detected_turn_on_lights
+          - automation.01_taend_lys_i_kokkenet
+          - automation.03_afspil_jazz_badevaerelse
+        enabled: true
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_modes
+        state: Default
+      sequence:
+      - service: homeassistant.turn_on
+        data: {}
+        target:
+          entity_id:
+          - automation.02_taend_lys_i_gangen_dag
+          - automation.01_taend_lys_i_kokkenet
+          - automation.13_taend_kokkenbord
+          - automation.living_room_when_motion_detected_turn_on_lights
+          - automation.badevaerelse_turn_on_lights
+          - automation.02_taend_lys_i_gangen_dag
+          - automation.living_room_when_motion_detected_turn_on_lights
+          - automation.01_taend_lys_i_kokkenet
+          - automation.03_afspil_jazz_badevaerelse
+          - automation.03_sluk_badevaerelse
+          - automation.02_sluk_lyset_i_gangen
+          - automation.01_sluk_lyset_i_kokkenet
+          - automation.13_sluk_kokkenbord
+          - automation.living_room_turn_off_lights_if_room_is_not_occupied
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_modes
+        state: HåndværkerMode
+      sequence:
+      - service: homeassistant.turn_off
+        data: {}
+        target:
+          entity_id:
+          - automation.02_sluk_lyset_i_gangen
+          - automation.03_sluk_badevaerelse
+          - automation.03_afspil_jazz_badevaerelse
+          - automation.living_room_turn_off_lights_if_room_is_not_occupied
+          - automation.13_sluk_kokkenbord
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_modes
+        state: NotHomeMode
+      sequence:
+      - service: homeassistant.turn_off
+        data: {}
+        target:
+          entity_id:
+          - automation.02_taend_lys_i_gangen_dag
+          - automation.badevaerelse_turn_on_lights
+          - automation.01_taend_lys_i_kokkenet
+          - automation.living_room_when_motion_detected_turn_on_lights
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.alle_lys
+      - service: media_player.turn_off
+        data: {}
+        target:
+          entity_id: media_player.android_tv_192_168_0_191
   mode: single
 - id: '1688020225082'
   alias: "BATHROOM - \U0001F9B7 - If toothbrush starts, keep lights on for 6 minutes"
@@ -1719,4 +1663,98 @@
     device_id: 9308915e55ba2202bf6b8fffce9a8bef
     entity_id: fcc566a3fb3a5c62825a306a894a4324
     domain: switch
+  mode: single
+- id: '1692126411402'
+  alias: "BEDROOM - \U0001FA9F - Bed switch, double tap dim up to open curtain"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: dim_up
+  condition: []
+  action:
+  - service: cover.set_cover_position
+    data:
+      position: 1
+    target:
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+  mode: single
+- id: '1692126467494'
+  alias: "BEDROOM - \U0001FA9F - Bed switch, double tap dim down, close curtains"
+  description: ''
+  trigger:
+  - device_id: 23396e9e01c511ebb8eeb9331cd02d5b
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: dim_down
+  condition: []
+  action:
+  - service: cover.set_cover_position
+    data:
+      position: 100
+    target:
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+  mode: single
+- id: '1692603275204'
+  alias: "BEDROOM - \U0001F39A - Switch - Dim down - Toggle curtain"
+  description: ''
+  trigger:
+  - device_id: db28128d01b811eb8b321fddc9a811b3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_down
+  condition: []
+  action:
+  - service: cover.toggle
+    data: {}
+    target:
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+  - if:
+    - condition: numeric_state
+      entity_id: cover.lumi_lumi_curtain_agl001_cover
+      attribute: current_position
+      below: 50
+    then:
+    - service: cover.close_cover
+      data: {}
+      target:
+        entity_id: cover.lumi_lumi_curtain_agl001_cover
+    else:
+    - service: cover.open_cover
+      data: {}
+      target:
+        entity_id: cover.lumi_lumi_curtain_agl001_cover
+  mode: single
+- id: '1695024467403'
+  alias: COUNTDOWN - ⏰ - Everyday send countdown to when we get our house
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition: []
+  action:
+  - service: notify.vindum_husum
+    data:
+      message: "I dag er der {{ states.sensor.overtagelse.state }} dage til overtagelsen!
+        \U0001F3E1"
+      title: "\U0001F3E1\U0001F3E1\U0001F3E1"
+      target: '#general'
+  mode: single
+- id: '1695104055202'
+  alias: COUNTDOWN - ⏰ - Countdown days until paternity leave
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition: []
+  action:
+  - service: notify.vindum_husum
+    data:
+      message: "I dag er der {{ states.sensor.dage_til_barsel.state }} dage til din
+        barsel! \U0001F476"
+      target: U04Q7DGE62C
   mode: single

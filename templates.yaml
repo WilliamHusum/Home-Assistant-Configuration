@@ -201,7 +201,7 @@
     - name: "Eigil alder i uger"
       icon: mdi:baby
       state: >
-        {{ ((as_timestamp(now()) - state_attr('input_datetime.eigil_birthday', 'timestamp')) / 86400 / 7) | int }}
+        {{ ((as_timestamp(now()) - state_attr('input_datetime.eigil_birthday', 'timestamp')) / 86400 / 7) | int }} uger
 
 - sensor:
     - name: "Sidste tankning liter brændstof"
